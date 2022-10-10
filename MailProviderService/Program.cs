@@ -21,11 +21,16 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseAuthorization();
+        if (!IsPortSet())
+            throw new Exception("PORT Environment variable not set!");
 
+        app.UseAuthorization();
 
         app.MapControllers();
 
         app.Run();
     }
+
+    private static bool IsPortSet()
+        => Environment.GetEnvironmentVariable("PORT") is not null;
 }
