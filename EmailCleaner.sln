@@ -5,7 +5,19 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEndNetMaui", "FrontEndNetMaui\FrontEndNetMaui.csproj", "{C2A40E8A-635D-482D-AD24-973214AC832F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailProviderService", "MailProviderService\MailProviderService.csproj", "{9F28F927-4EAD-4265-82EB-69C182EC38E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MailProviderService", "MailProviderService\MailProviderService.csproj", "{9F28F927-4EAD-4265-82EB-69C182EC38E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MailCollectorService", "MailCollectorService\MailCollectorService.csproj", "{A5115B31-BF2A-4E16-888E-550B6B6CA5E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AttachmentService", "AttachmentService\AttachmentService.csproj", "{DD35B81F-352B-4213-A2CD-4C9BF46E1E83}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\APIGateway.csproj", "{8AAF43AE-1FBB-41CE-9061-E6F36AEDB2A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{ED4BAFF5-0C81-4038-BB12-787217D7C4C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEndNetMauiTests", "UnitTests\FrontEndNetMauiTests\FrontEndNetMauiTests.csproj", "{4E83B529-F587-4752-B29B-F54D58497417}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEndConsole", "FrontEndConsole\FrontEndConsole.csproj", "{D2BE030E-80DC-450E-9F5F-E7AE21304206}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,9 +35,32 @@ Global
 		{9F28F927-4EAD-4265-82EB-69C182EC38E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F28F927-4EAD-4265-82EB-69C182EC38E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F28F927-4EAD-4265-82EB-69C182EC38E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5115B31-BF2A-4E16-888E-550B6B6CA5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5115B31-BF2A-4E16-888E-550B6B6CA5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5115B31-BF2A-4E16-888E-550B6B6CA5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5115B31-BF2A-4E16-888E-550B6B6CA5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD35B81F-352B-4213-A2CD-4C9BF46E1E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD35B81F-352B-4213-A2CD-4C9BF46E1E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD35B81F-352B-4213-A2CD-4C9BF46E1E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD35B81F-352B-4213-A2CD-4C9BF46E1E83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AAF43AE-1FBB-41CE-9061-E6F36AEDB2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AAF43AE-1FBB-41CE-9061-E6F36AEDB2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AAF43AE-1FBB-41CE-9061-E6F36AEDB2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AAF43AE-1FBB-41CE-9061-E6F36AEDB2A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E83B529-F587-4752-B29B-F54D58497417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E83B529-F587-4752-B29B-F54D58497417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E83B529-F587-4752-B29B-F54D58497417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E83B529-F587-4752-B29B-F54D58497417}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4E83B529-F587-4752-B29B-F54D58497417} = {ED4BAFF5-0C81-4038-BB12-787217D7C4C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}

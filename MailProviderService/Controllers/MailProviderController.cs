@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MailProviderService.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MailProviderService.Controllers
 {
     [ApiController]
-    [Route("mailprovider")]
+    [Route("v1/mailprovider")]
     public class MailProviderController
     {
         public MailProviderController()
@@ -14,5 +15,18 @@ namespace MailProviderService.Controllers
         [HttpGet("ping")]
         public string Ping()
             => "pong";
+
+        [HttpGet]
+        public async Task<List<Email>> GetEmails()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public async Task AddEmails()
+        {
+
+        }
+        //TODO Add emails to store
     }
 }
