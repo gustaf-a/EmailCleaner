@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+            x:Class="FrontEndNetMaui.View.MainPage"
+            xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:model="clr-namespace:FrontEndNetMaui.Model"
+            xmlns:viewmodel="clr-namespace:FrontEndNetMaui.ViewModel"
+            x:DataType="viewmodel:MainPageViewModel"
+            Title="{Binding Title}">
+
+    <VerticalStackLayout
+            Spacing="25"
+            Padding="30"
+            VerticalOptions="FillAndExpand">
+
+        <HorizontalStackLayout
+                VerticalOptions="End"
+                MinimumWidthRequest="200"
+                HorizontalOptions="Center"
+                Spacing="20">
+
+            <Button 
+                    x:Name="CollectEmailsBtn"
+                    Text="Collect Emails"
+                    Command="{Binding StartCollectEmailsClickedCommand}"/>
+
+            <!--TODO IsVisible and IsEnabled driven by Binding in ViewModel-->
+
+            <Button 
+                    x:Name="StopCollectEmailsBtn"
+                    Text="Stop Collecting"
+                    Command="{Binding StopCollectEmailsClickedCommand}"/>
+
+        </HorizontalStackLayout>
+        
+        <HorizontalStackLayout
+            HorizontalOptions="Center"
+            RadioButtonGroup.GroupName="GroupMethods">
+
+            <RadioButton
+                    Content="Group by senders"
+                    CheckedChanged="OnGroupByClicked"/>
+            <RadioButton
+                    Content="Group by subjects"
+                    CheckedChanged="OnGroupByClicked"/>
+            <RadioButton
+                    Content="Group by tags"
+                    CheckedChanged="OnGroupByClicked"/>
+        </HorizontalStackLayout>
+
+        <ScrollView MaximumHeightRequest="400">
+            <CollectionView x:Name="EmailGroupsCollectionView"
+                            ItemsSource="{Binding GroupedEmails}"
+                            EmptyView="No emails collected. Please collect emails to proceed."
+                            VerticalOptions="CenterAndExpand"
+                            SelectionMode="Multiple"
+                            SelectionChanged="OnEmailGroupsCollectionViewSelectionChanged">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:EmailGroup">
+                        <Grid Padding="10" ColumnDefinitions="30,*">
+                            <Label Grid.Column="0"
+                                        Text="{Binding EmailsCount}"/>
+                            <Label Grid.Column="1"
+                                    Text="{Binding GroupedByValue}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <HorizontalStackLayout
+                x:Name="EmailActionButtonsLayout"
+                VerticalOptions="End"
+                MinimumWidthRequest="200"
+                HorizontalOptions="Center"
+                Spacing="20">
+
+            <Button
+                x:Name="DeleteSelectedBtn"
+                Text="Collect Emails"
+                Command="{Binding DeleteSelectedCommand}"
+                >
+
+            </Button>
+            
+        </HorizontalStackLayout>
+        
+    </VerticalStackLayout>
+
+</ContentPage>
