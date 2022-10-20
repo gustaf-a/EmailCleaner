@@ -1,8 +1,15 @@
+using Serilog;
+
 namespace MailProviderService;
 public class Program
 {
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.File("logs/mailprovider.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.

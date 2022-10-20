@@ -2,6 +2,7 @@
 using FrontEndNetMaui.Services;
 using FrontEndNetMaui.View;
 using FrontEndNetMaui.ViewModel;
+using Serilog;
 
 namespace FrontEndNetMaui;
 
@@ -11,7 +12,10 @@ public static class MauiProgram
 	{
 		var builder = MauiApp.CreateBuilder();
 
-		//TODO Setup Serilog
+        Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File("logs/frontendmaui.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
 
         // Initialise community toolkit
         builder.UseMauiApp<App>().UseMauiCommunityToolkitCore();
