@@ -17,6 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEndNetMauiTests", "Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEndConsole", "FrontEndConsole\FrontEndConsole.csproj", "{D2BE030E-80DC-450E-9F5F-E7AE21304206}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MailCollectorServiceTests", "UnitTests\MailCollectorServiceTests\MailCollectorServiceTests.csproj", "{2DE15E69-FDA4-4122-B487-A28CC4F9FDA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF31459A-DABB-4910-AC2A-25B202064416}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,12 +57,17 @@ Global
 		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2BE030E-80DC-450E-9F5F-E7AE21304206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE15E69-FDA4-4122-B487-A28CC4F9FDA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE15E69-FDA4-4122-B487-A28CC4F9FDA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE15E69-FDA4-4122-B487-A28CC4F9FDA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE15E69-FDA4-4122-B487-A28CC4F9FDA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4E83B529-F587-4752-B29B-F54D58497417} = {ED4BAFF5-0C81-4038-BB12-787217D7C4C3}
+		{2DE15E69-FDA4-4122-B487-A28CC4F9FDA9} = {ED4BAFF5-0C81-4038-BB12-787217D7C4C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
