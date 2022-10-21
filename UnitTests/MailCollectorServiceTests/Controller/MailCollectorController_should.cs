@@ -10,11 +10,11 @@ namespace MailCollectorServiceTests.Controller
     public class MailCollectorController_should
         : IClassFixture<WebApplicationFactory<Startup>>
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         private const string ControllerRoute = "v1/mailcollector";
 
-        private FakeEventQueue _fakeEventQueue;
+        private readonly FakeEventQueue _fakeEventQueue;
 
         public MailCollectorController_should(WebApplicationFactory<Startup> factory)
         {
