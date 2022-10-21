@@ -1,3 +1,6 @@
+using MailCollectorService.CollectorHandler;
+using MailCollectorService.EventQueue;
+using MailCollectorService.Services;
 using Serilog;
 
 namespace MailCollectorService;
@@ -8,31 +11,16 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("logs/mailcollector.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        var startup = new Startup(builder.Configuration);
+        startup.ConfigureServices(builder.Services);
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.Run();
+        startup.Configure(app, app.Environment);
     }
 }
