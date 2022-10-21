@@ -1,4 +1,4 @@
-﻿using MailCollectorService.Services;
+﻿using MailCollectorService.CollectorHandler;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MailCollectorService.Controllers
@@ -7,25 +7,31 @@ namespace MailCollectorService.Controllers
     [Route("v1/mailcollector")]
     public class MailCollectorController
     {
-        private IEmailCollectorService _collectorService;
+        private ICollectorHandler _collectorHandler;
 
-        public MailCollectorController(IEmailCollectorService collectorService)
+        public MailCollectorController(ICollectorHandler collectorHandler)
         {
-            _collectorService = collectorService;
+            _collectorHandler = collectorHandler;
         }
 
         [HttpGet("ping")]
         public string Ping()
             => "pong";
 
-        [HttpGet]
-        public async Task StartCollectingMessages()
+        [HttpGet("start")]
+        public Task StartCollectingMessages()
         {
-            
+            _collectorHandler.StartCollector();
 
-            //TODO What input will be needed?
+            return Task.CompletedTask;
         }
 
-        //TODO StopCollectingMessages
+        [HttpGet("stop")]
+        public Task StopCollectingMessages()
+        {
+            _collectorHandler.StopCollector();
+
+            return Task.CompletedTask;
+        }
     }
 }

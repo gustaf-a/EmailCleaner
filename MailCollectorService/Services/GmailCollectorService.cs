@@ -1,8 +1,30 @@
-﻿namespace MailCollectorService.Services;
+﻿using MailCollectorService.Data;
+using MailCollectorService.Repository;
 
-public class GmailCollectorService
+namespace MailCollectorService.Services;
+
+public class GmailCollectorService : IEmailCollectorService
 {
-    //TODO Start to collect messages and send to the bus. RabbitMQ
+    private IGmailRepository _gmailRepository;
 
-    //TODO Cancel collection of messages
+    public GmailCollectorService(IGmailRepository gmailRepository)
+    {
+        _gmailRepository = gmailRepository;
+    }
+
+    public async Task<List<Email>> GetEmails()
+    {
+        try
+        {
+            var undetailedMessages = await _gmailRepository.GetEmails();
+
+            var detailedMessages = await _gmailRepository.GetEmailDetails(undetailedMessages);
+
+            return detailedMessages.ToEmailList();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 }
