@@ -57,11 +57,18 @@ namespace MailCollectorService.CollectorHandler
             {
                 isRunning = true;
 
-                Log.Information("Email collecting started.");
+                Log.Information("Email collection started.");
 
                 do
                 {
                     var emails = await _emailCollectorService.GetEmails();
+
+                    if(emails.Count == 0)
+                    {
+                        Log.Information("No more emails found. Stopping collection of emails.");
+
+                        break;
+                    }
 
                     _eventQueue.PublishToQueue(_eventName, emails);
 
@@ -77,7 +84,7 @@ namespace MailCollectorService.CollectorHandler
             {
                 isRunning = false;
 
-                Log.Information("Email collecting stopped.");
+                Log.Information("Email collection stopped.");
             }
         }
     }
