@@ -2,7 +2,6 @@
 using MailCollectorService.EventQueue;
 using MailCollectorService.Repository;
 using MailCollectorService.Services;
-using Microsoft.AspNetCore.Builder;
 
 namespace MailCollectorService;
 

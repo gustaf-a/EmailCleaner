@@ -1,6 +1,3 @@
-using MailCollectorService.CollectorHandler;
-using MailCollectorService.EventQueue;
-using MailCollectorService.Services;
 using Serilog;
 
 namespace MailCollectorService;
