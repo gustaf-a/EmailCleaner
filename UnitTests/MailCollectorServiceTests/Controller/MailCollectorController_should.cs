@@ -44,7 +44,7 @@ namespace MailCollectorServiceTests.Controller
             var responseStart = await _client.GetAsync($"{ControllerRoute}/start");
             responseStart.EnsureSuccessStatusCode();
 
-            Thread.Sleep(300);
+            Thread.Sleep(5000);
 
             var responseStop = await _client.GetAsync($"{ControllerRoute}/stop");
 

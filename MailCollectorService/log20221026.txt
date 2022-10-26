@@ -1,0 +1,40 @@
+2022-10-26 09:30:43.178 +02:00 [INF] Received command to start collecting.
+2022-10-26 09:30:43.260 +02:00 [INF] Email collection started.
+2022-10-26 09:31:11.187 +02:00 [INF] Received command to stop collecting.
+2022-10-26 09:31:13.934 +02:00 [ERR] Exception thrown when collecting emails: A task was canceled..
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteUnparsedAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at MailCollectorService.Repository.GmailRepositoryV1.GetEmailDetails(List`1 undetailedMessages, CancellationToken cancellationToken) in C:\Users\gusta\source\repos\EmailCleaner\MailCollectorService\Repository\GmailRepositoryV1.cs:line 116
+   at MailCollectorService.Services.GmailCollectorService.GetEmails(CancellationToken cancellationToken) in C:\Users\gusta\source\repos\EmailCleaner\MailCollectorService\Services\GmailCollectorService.cs:line 21
+   at MailCollectorService.CollectorHandler.CollectorHandler.CollectEmails(CancellationToken cancellationToken) in C:\Users\gusta\source\repos\EmailCleaner\MailCollectorService\CollectorHandler\CollectorHandler.cs:line 64
+2022-10-26 09:31:44.775 +02:00 [INF] Email collection stopped.
+2022-10-26 09:31:50.614 +02:00 [INF] Received command to start collecting.
+2022-10-26 09:31:50.615 +02:00 [INF] Email collection started.
+2022-10-26 09:32:30.792 +02:00 [INF] Received command to stop collecting.
+2022-10-26 09:32:34.151 +02:00 [ERR] Exception thrown when collecting emails: A task was canceled..
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteUnparsedAsync(CancellationToken cancellationToken)
+   at Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(CancellationToken cancellationToken)
+   at MailCollectorService.Repository.GmailRepositoryV1.GetEmailDetails(List`1 undetailedMessages, CancellationToken cancellationToken) in C:\Users\gusta\source\repos\EmailCleaner\MailCollectorService\Repository\GmailRepositoryV1.cs:line 116
+   at MailCollectorService.Services.GmailCollectorService.GetEmails(CancellationToken cancellationToken) in C:\Users\gusta\source\repos\EmailCleaner\MailCollectorService\Services\GmailCollectorService.cs:line 21
+   at MailCollectorService.CollectorHandler.CollectorHandler.CollectEmails(CancellationToken cancellationToken) in C:\Users\gusta\source\repos\EmailCleaner\MailCollectorService\CollectorHandler\CollectorHandler.cs:line 64
+2022-10-26 09:32:50.802 +02:00 [INF] Email collection stopped.
+2022-10-26 09:32:52.954 +02:00 [INF] Received command to start collecting.
+2022-10-26 09:32:52.954 +02:00 [INF] Email collection started.
+2022-10-26 09:36:26.038 +02:00 [INF] Email batch sent to queue with 50 emails.
+2022-10-26 09:36:36.751 +02:00 [INF] Received command to stop collecting.
+2022-10-26 09:36:52.480 +02:00 [INF] Email batch sent to queue with 18 emails.
+2022-10-26 09:37:09.402 +02:00 [INF] Email collection stopped.
+2022-10-26 09:59:15.099 +02:00 [INF] Received command to start collecting.
+2022-10-26 09:59:15.155 +02:00 [INF] Email collection started.
+2022-10-26 09:59:31.957 +02:00 [INF] Email batch sent to queue with 50 emails.
+2022-10-26 09:59:47.106 +02:00 [INF] Email batch sent to queue with 50 emails.
+2022-10-26 10:00:01.673 +02:00 [INF] Email batch sent to queue with 50 emails.
+2022-10-26 10:00:24.146 +02:00 [INF] Email batch sent to queue with 50 emails.
+2022-10-26 10:00:40.193 +02:00 [INF] Email batch sent to queue with 50 emails.
+2022-10-26 10:00:54.796 +02:00 [INF] Email batch sent to queue with 50 emails.

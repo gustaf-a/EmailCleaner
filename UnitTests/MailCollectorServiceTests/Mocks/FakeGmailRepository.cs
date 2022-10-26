@@ -23,14 +23,14 @@ namespace MailCollectorServiceTests.Mocks
             _gmailsDetailedJsonFilePath = Path.Combine(samplesFolderPath, "gmail_emails_1_details.txt");
         }
 
-        public Task<List<Message>> GetEmailDetails(List<Message> messages)
+        public Task<List<Message>> GetEmailDetails(List<Message> messages, CancellationToken cancellationToken)
         {
             var message = GetFileContents<Message>(_gmailsDetailedJsonFilePath);
 
             return Task.FromResult(new List<Message> { message });
         }
 
-        public Task<List<Message>> GetEmails()
+        public Task<List<Message>> GetEmails(CancellationToken cancellationToken)
         {
             var listMessagesResponse = GetFileContents<ListMessagesResponse>(_gmailsJsonFilePath);
 

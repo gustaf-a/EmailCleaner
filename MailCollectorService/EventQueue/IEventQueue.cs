@@ -2,6 +2,6 @@
 {
     public interface IEventQueue
     {
-        public void PublishToQueue(string eventName, object eventData);
+        public void PublishToQueue(string exchange, string eventName, object eventData);
     }
 }

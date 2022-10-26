@@ -1,5 +1,6 @@
 ﻿using MailCollectorService.CollectorHandler;
 using MailCollectorService.EventQueue;
+using MailCollectorService.Repository;
 using MailCollectorService.Services;
 using Microsoft.AspNetCore.Builder;
 
@@ -29,6 +30,7 @@ public class Startup
         services.AddSingleton<IEmailCollectorService, GmailCollectorService>();
         services.AddSingleton<IEventQueue, RabbitMqEventQueue>();
         
+        services.AddSingleton<IGmailRepository, GmailRepositoryV1>();
         services.AddSingleton<ICollectorHandler, CollectorHandler.CollectorHandler>();
 
     }

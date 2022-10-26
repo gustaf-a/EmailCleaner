@@ -2,7 +2,7 @@
 {
     public interface IGmailRepository
     {
-        public Task<List<Google.Apis.Gmail.v1.Data.Message>> GetEmails();
-        public Task<List<Google.Apis.Gmail.v1.Data.Message>> GetEmailDetails(List<Google.Apis.Gmail.v1.Data.Message> messages);
+        public Task<List<Google.Apis.Gmail.v1.Data.Message>> GetEmails(CancellationToken cancellationToken);
+        public Task<List<Google.Apis.Gmail.v1.Data.Message>> GetEmailDetails(List<Google.Apis.Gmail.v1.Data.Message> messages, CancellationToken cancellationToken);
     }
 }

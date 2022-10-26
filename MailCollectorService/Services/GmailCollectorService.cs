@@ -5,26 +5,52 @@ namespace MailCollectorService.Services;
 
 public class GmailCollectorService : IEmailCollectorService
 {
-    private IGmailRepository _gmailRepository;
+    private readonly IGmailRepository _gmailRepository;
 
     public GmailCollectorService(IGmailRepository gmailRepository)
     {
         _gmailRepository = gmailRepository;
     }
 
-    public async Task<List<Email>> GetEmails()
+    public async Task<List<Email>> GetEmails(CancellationToken cancellationToken)
     {
-        try
-        {
-            var undetailedMessages = await _gmailRepository.GetEmails();
+        currentAttempts = 0;
 
-            var detailedMessages = await _gmailRepository.GetEmailDetails(undetailedMessages);
-
-            return detailedMessages.ToEmailList();
-        }
-        catch (Exception)
+        do
         {
-            throw;
-        }
+            try
+            {
+                var undetailedMessages = await _gmailRepository.GetEmails(cancellationToken);
+
+                var detailedMessages = await _gmailRepository.GetEmailDetails(undetailedMessages, cancellationToken);
+
+                return detailedMessages.ToEmailList();
+            }
+            catch (Exception ex)
+            {
+                //TODO Check if is gmail exception
+
+                if (ShouldRetryOn(ex))
+                    continue;
+                
+                throw;
+            }
+        } while (!cancellationToken.IsCancellationRequested);
+
+        return new();
+    }
+
+    private readonly int maxAttempts = 5;
+    private int currentAttempts = 0;
+
+    private bool ShouldRetryOn(Exception ex)
+    {
+        if(currentAttempts > maxAttempts)
+            return false;
+
+        currentAttempts++;
+        //Pause before trying again
+
+        return true;
     }
 }

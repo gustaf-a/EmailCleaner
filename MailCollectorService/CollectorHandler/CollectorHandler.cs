@@ -1,4 +1,5 @@
-﻿using MailCollectorService.EventQueue;
+﻿using MailCollectorService.Configuration;
+using MailCollectorService.EventQueue;
 using MailCollectorService.Services;
 using Serilog;
 
@@ -6,23 +7,22 @@ namespace MailCollectorService.CollectorHandler
 {
     public class CollectorHandler : ICollectorHandler
     {
+        private readonly EventQueueOptions _eventQueueOptions;
+
         private readonly IEmailCollectorService _emailCollectorService;
         private readonly IEventQueue _eventQueue;
-
-        private readonly string _eventName;
 
         private CancellationTokenSource? _cancellationTokenSource;
 
         private bool isRunning;
 
-        public CollectorHandler(IEmailCollectorService emailCollectorService, IEventQueue eventQueue)
+        public CollectorHandler(IConfiguration configuration, IEmailCollectorService emailCollectorService, IEventQueue eventQueue)
         {
+            _eventQueueOptions = configuration.GetSection(EventQueueOptions.EventQueue).Get<EventQueueOptions>();
+
             _emailCollectorService = emailCollectorService;
 
             _eventQueue = eventQueue;
-
-            //TODO Get from configuration see repo
-            _eventName = "collected";
         }
 
         public void StartCollector()
@@ -61,16 +61,16 @@ namespace MailCollectorService.CollectorHandler
 
                 do
                 {
-                    var emails = await _emailCollectorService.GetEmails();
+                    var emails = await _emailCollectorService.GetEmails(cancellationToken);
 
-                    if(emails.Count == 0)
+                    if (emails is null || emails.Count == 0)
                     {
                         Log.Information("No more emails found. Stopping collection of emails.");
 
                         break;
                     }
 
-                    _eventQueue.PublishToQueue(_eventName, emails);
+                    _eventQueue.PublishToQueue(_eventQueueOptions.Exchange, _eventQueueOptions.RoutingKey, emails);
 
                     Log.Information($"Email batch sent to queue with {emails.Count} emails.");
 
