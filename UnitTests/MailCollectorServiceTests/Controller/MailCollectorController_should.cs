@@ -1,5 +1,5 @@
 ﻿using MailCollectorService;
-using MailCollectorService.EventQueue;
+using MailCollectorService.MessageQueue;
 using MailCollectorService.Repository;
 using MailCollectorServiceTests.Mocks;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -27,7 +27,7 @@ namespace MailCollectorServiceTests.Controller
                 {
                     builder.ConfigureServices(services =>
                     {
-                        services.AddSingleton<IEventQueue>(_fakeEventQueue);
+                        services.AddSingleton<IMessageQueue>(_fakeEventQueue);
                         services.AddSingleton<IGmailRepository>(fakeGmailRepository);
                     });
                 }

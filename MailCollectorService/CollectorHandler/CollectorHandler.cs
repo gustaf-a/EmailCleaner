@@ -1,5 +1,5 @@
 ﻿using MailCollectorService.Configuration;
-using MailCollectorService.EventQueue;
+using MailCollectorService.MessageQueue;
 using MailCollectorService.Services;
 using Serilog;
 
@@ -7,18 +7,18 @@ namespace MailCollectorService.CollectorHandler
 {
     public class CollectorHandler : ICollectorHandler
     {
-        private readonly EventQueueOptions _eventQueueOptions;
+        private readonly MessageQueueOptions _messageQueueOptions;
 
         private readonly IEmailCollectorService _emailCollectorService;
-        private readonly IEventQueue _eventQueue;
+        private readonly IMessageQueue _eventQueue;
 
         private CancellationTokenSource? _cancellationTokenSource;
 
         private bool isRunning;
 
-        public CollectorHandler(IConfiguration configuration, IEmailCollectorService emailCollectorService, IEventQueue eventQueue)
+        public CollectorHandler(IConfiguration configuration, IEmailCollectorService emailCollectorService, IMessageQueue eventQueue)
         {
-            _eventQueueOptions = configuration.GetSection(EventQueueOptions.EventQueue).Get<EventQueueOptions>();
+            _messageQueueOptions = configuration.GetSection(MessageQueueOptions.MessageQueue).Get<MessageQueueOptions>();
 
             _emailCollectorService = emailCollectorService;
 
@@ -70,7 +70,7 @@ namespace MailCollectorService.CollectorHandler
                         break;
                     }
 
-                    _eventQueue.PublishToQueue(_eventQueueOptions.Exchange, _eventQueueOptions.RoutingKey, emails);
+                    _eventQueue.PublishToQueue(_messageQueueOptions.Exchange, _messageQueueOptions.RoutingKeyCollected, emails);
 
                     Log.Information($"Email batch sent to queue with {emails.Count} emails.");
 

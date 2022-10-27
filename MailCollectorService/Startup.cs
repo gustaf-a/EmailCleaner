@@ -1,5 +1,5 @@
 ﻿using MailCollectorService.CollectorHandler;
-using MailCollectorService.EventQueue;
+using MailCollectorService.MessageQueue;
 using MailCollectorService.Repository;
 using MailCollectorService.Services;
 
@@ -25,9 +25,8 @@ public class Startup
 
         services.AddHttpClient();
 
-        //TODO replace with factory using key from appsettings
         services.AddSingleton<IEmailCollectorService, GmailCollectorService>();
-        services.AddSingleton<IEventQueue, RabbitMqEventQueue>();
+        services.AddSingleton<IMessageQueue, RabbitMqMessageQueueV1>();
         
         services.AddSingleton<IGmailRepository, GmailRepositoryV1>();
         services.AddSingleton<ICollectorHandler, CollectorHandler.CollectorHandler>();

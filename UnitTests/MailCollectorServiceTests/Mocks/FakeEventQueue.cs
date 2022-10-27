@@ -1,8 +1,8 @@
-﻿using MailCollectorService.EventQueue;
+﻿using MailCollectorService.MessageQueue;
 
 namespace MailCollectorServiceTests.Mocks
 {
-    internal class FakeEventQueue : IEventQueue
+    internal class FakeEventQueue : IMessageQueue
     {
         public int NumberOfTimesCalled = 0;
 
