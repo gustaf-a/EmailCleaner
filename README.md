@@ -1,8 +1,13 @@
 # EmailCleaner
 
 An application which collects emails and groups them in different ways to make it easy to clean the inbox.
+This is a practice project built with a tech stack and architecture best suited for my own curiosity 
+and learning rather than performance.
 
-Built using an API gateway microservices pattern.
+Features: 
+- Microservices in docker containers built around an API Gateway pattern
+- RabbitMQ between two microservices for async communication
+- Service tests
 
 Currently only supporting GMail.
 
@@ -16,19 +21,36 @@ Runs a collector which retrieves emails and publishes the emails to the RabbitMQ
 
 ### RabbitMQ between MailCollectorService and MailProviderService
 
+1. Start a docker container with RabbitMQ using enabling port 5672
+2. Setup RabbitMQ queue.
+
 Here's a good guide for more indepth instructions:
 https://itnext.io/how-to-build-an-event-driven-asp-net-core-microservice-architecture-e0ef2976f33f
 
-1. Start a docker container with RabbitMQ using enabling port 5672
-2. Setup RabbitMQ queue.
-3. Add EventQueue options to appsettings in MailCollectorService
+### MailProviderService
 
-Example EventQueue-section from appsettings.json in MailCollectorService:
+1. Add MessageQueue options to appsettings in MailProviderService. Get exchange from RabbitMQ queue created.
+
+Example MessageQueue-section from appsettings.json in MailProviderService:
 ```
-     "EventQueue": {
+      "MessageQueue": {
         "Exchange": "emails",
-        "RoutingKey": "emails.collected"
-     }
+        "HostName": "localhost",
+        "RoutingKeyCollected": "emails.collected"
+      }
+```
+
+### MailCollectorService
+
+1. Add MessageQueue options to appsettings in MailCollectorService. Get exchange from RabbitMQ queue created.
+
+Example MessageQueue-section from appsettings.json in MailCollectorService:
+```
+      "MessageQueue": {
+        "Exchange": "emails",
+        "HostName": "localhost",
+        "RoutingKeyCollected": "emails.collected"
+      }
 ```
 
 ### Google Cloud Project Setup
@@ -51,6 +73,21 @@ Example Gmail-section from appsettings.json in MailCollectorService:
 
 ## Future development
 
+- Create docker-compose.yml 
+- Create Platform library for microservices startup
+
+### API Gateway
+
+- Implement an authentication microservice for when connecting with the gateway, for example with JWT auth.
+
+
 ### MailCollectorService
+
 - Use batch requests instead. No difference for limit per minute, but faster.
+- Download attachments?
+- 
+
+### MailProviderService
+
+- 
 
