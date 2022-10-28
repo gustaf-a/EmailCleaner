@@ -16,7 +16,11 @@
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1",
+                    new Microsoft.OpenApi.Models.OpenApiInfo { Title = "APIGateway", Version = "v1" });
+            });
 
             services.AddHttpClient();
         }
