@@ -3,7 +3,7 @@ using RabbitMQ.Client;
 
 namespace MailProviderService.MessageQueue;
 
-public interface IChannelBuilder
+public interface IChannelFactory
 {
-    public IModel BuildChannel(MessageQueueOptions messageQueueOptions);
+    public IModel Create(MessageQueueOptions messageQueueOptions);
 }

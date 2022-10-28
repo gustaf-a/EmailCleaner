@@ -3,9 +3,9 @@ using RabbitMQ.Client;
 
 namespace MailProviderService.MessageQueue;
 
-public class RabbitMqChannelBuilder : IChannelBuilder
+public class RabbitMqChannelFactory : IChannelFactory
 {
-    public IModel BuildChannel(MessageQueueOptions messageQueueOptions)
+    public IModel Create(MessageQueueOptions messageQueueOptions)
     {
         var factory = new ConnectionFactory() { HostName = messageQueueOptions.HostName };
         using var connection = factory.CreateConnection();

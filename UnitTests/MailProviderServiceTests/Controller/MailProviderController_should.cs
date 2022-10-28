@@ -2,11 +2,9 @@
 using MailProviderService.MessageQueue;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Testing;
-using MailProviderServiceTests.Mocks;
 using Moq;
 using RabbitMQ.Client;
 using MailProviderServiceTests.Mocks.MessageQueue;
-using Castle.DynamicProxy;
 
 namespace MailProviderServiceTests.Controller
 {
@@ -28,7 +26,7 @@ namespace MailProviderServiceTests.Controller
                 {
                     builder.ConfigureServices(services =>
                     {
-                        services.AddSingleton<IChannelBuilder>(new RabbitMqChannelBuilderMock(_modelMock));
+                        services.AddSingleton<IChannelFactory>(new RabbitMqChannelFactoryMock(_modelMock));
                     });
                 }
                 )

@@ -1,7 +1,6 @@
 ﻿using RabbitMQ.Client;
 using MailProviderService.Configuration;
 using MailProviderService.MessageConsumer;
-using MailProviderService.EmailStore;
 using Serilog;
 
 namespace MailProviderService.MessageQueue
@@ -16,11 +15,11 @@ namespace MailProviderService.MessageQueue
 
         private string _tag;
 
-        public RabbitMqMessageQueue(IConfiguration configuration, IChannelBuilder channelBuilder, IMessageConsumerFactory messageConsumerFactory)
+        public RabbitMqMessageQueue(IConfiguration configuration, IChannelFactory channelBuilder, IMessageConsumerFactory messageConsumerFactory)
         {
             _messageQueueOptions = configuration.GetSection(MessageQueueOptions.MessageQueue).Get<MessageQueueOptions>();
 
-            _channel = channelBuilder.BuildChannel(_messageQueueOptions);
+            _channel = channelBuilder.Create(_messageQueueOptions);
 
             _channel.QueueDeclare(queue: _messageQueueOptions.RoutingKeyCollected,
                                  durable: false,

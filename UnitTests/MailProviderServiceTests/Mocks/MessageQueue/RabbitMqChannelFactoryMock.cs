@@ -5,11 +5,11 @@ using RabbitMQ.Client;
 
 namespace MailProviderServiceTests.Mocks.MessageQueue;
 
-internal class RabbitMqChannelBuilderMock : IChannelBuilder
+internal class RabbitMqChannelFactoryMock : IChannelFactory
 {
     private readonly Mock<IModel> _mock;
 
-    public RabbitMqChannelBuilderMock(Mock<IModel> mock)
+    public RabbitMqChannelFactoryMock(Mock<IModel> mock)
     {
         mock.Setup(m =>
                 m.BasicConsume(It.IsAny<string>(),
@@ -24,7 +24,7 @@ internal class RabbitMqChannelBuilderMock : IChannelBuilder
         _mock = mock;
     }
 
-    public IModel BuildChannel(MessageQueueOptions messageQueueOptions)
+    public IModel Create(MessageQueueOptions messageQueueOptions)
     {
         return _mock.Object;
     }
