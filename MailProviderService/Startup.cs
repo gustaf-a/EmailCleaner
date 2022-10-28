@@ -1,6 +1,8 @@
-﻿using MailProviderService.EmailStore;
+﻿using MailProviderService.Data;
+using MailProviderService.EmailStore;
 using MailProviderService.MessageConsumer;
 using MailProviderService.MessageQueue;
+using MailProviderService.Repository;
 
 namespace MailProviderService;
 
@@ -15,10 +17,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add services to the container.
-
         services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(s => 
         {
@@ -28,10 +28,11 @@ public class Startup
 
         services.AddHttpClient();
 
-        services.AddSingleton<IChannelBuilder, RabbitMqChannelBuilder>();
-        services.AddSingleton<IEmailStore, EmailStoreV0>();
+        services.AddSingleton<IChannelFactory, RabbitMqChannelFactory>();
+        services.AddSingleton<IEmailStore, EmailStoreV1>();
         services.AddSingleton<IMessageConsumerFactory, MessageConsumerFactory>();
         services.AddSingleton<IMessageQueue, RabbitMqMessageQueue>();
+        services.AddSingleton<IEmailRepository, EmailRepositoryV1>();
     }
 
     public void Configure(WebApplication app)

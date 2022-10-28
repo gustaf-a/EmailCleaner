@@ -5,5 +5,6 @@ namespace MailProviderService.EmailStore;
 public interface IEmailStore
 {
     public Task<List<Email>> GetEmails();
-    public void StoreEmails(List<Email> emails);
+    public Task StoreEmails(List<Email> emails);
+    public Task DeleteEmails(List<Email> emails);
 }
