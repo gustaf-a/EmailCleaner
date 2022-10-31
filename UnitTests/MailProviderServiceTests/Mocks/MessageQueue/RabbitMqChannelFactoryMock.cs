@@ -1,31 +1,24 @@
 ﻿using MailProviderService.Configuration;
 using MailProviderService.MessageQueue;
-using Moq;
 using RabbitMQ.Client;
 
 namespace MailProviderServiceTests.Mocks.MessageQueue;
 
 internal class RabbitMqChannelFactoryMock : IChannelFactory
 {
-    private readonly Mock<IModel> _mock;
+    private static IModel _fakeModel;
 
-    public RabbitMqChannelFactoryMock(Mock<IModel> mock)
+    public static void SetFakeModel(IModel fakeModel)
+        => _fakeModel = fakeModel;
+
+    public RabbitMqChannelFactoryMock()
     {
-        mock.Setup(m =>
-                m.BasicConsume(It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<string>(),
-                It.IsAny<bool>(),
-                It.IsAny<bool>(),
-                It.IsAny<IDictionary<string, object>>(),
-                It.IsAny<IBasicConsumer>()))
-            .Returns("test_tag");
-
-        _mock = mock;
+        if (_fakeModel is null)
+            throw new Exception($"FakeModel must be set before creating instances of {nameof(RabbitMqChannelFactoryMock)}");
     }
 
     public IModel Create(MessageQueueOptions messageQueueOptions)
     {
-        return _mock.Object;
+        return _fakeModel;
     }
 }
