@@ -3,6 +3,7 @@ using MailProviderService.EmailStore;
 using MailProviderService.MessageConsumer;
 using MailProviderService.MessageQueue;
 using MailProviderService.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MailProviderService;
 
@@ -28,17 +29,28 @@ public class Startup
 
         services.AddHttpClient();
 
-        services.AddSingleton<IChannelFactory, RabbitMqChannelFactory>();
-        services.AddSingleton<IEmailStore, EmailStoreV1>();
-        services.AddSingleton<IMessageConsumerFactory, MessageConsumerFactory>();
-        services.AddSingleton<IMessageQueue, RabbitMqMessageQueue>();
-        services.AddSingleton<IEmailRepository, EmailRepositoryV1>();
+        services.AddScoped<IChannelFactory, RabbitMqChannelFactory>();
+        services.AddScoped<IEmailStore, EmailStoreV1>();
+        services.AddScoped<IEmailRepository, EmailRepositoryV1>();
+        services.AddScoped<IMessageConsumerFactory, MessageConsumerFactory>();
+        services.AddScoped<IMessageQueue, RabbitMqMessageQueue>();
+
+        services.AddDbContext<MailProviderServiceContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("EmailDb")));
     }
 
     public void Configure(WebApplication app)
     {
         if (app.Environment.IsDevelopment())
         {
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MailProviderServiceContext>();
+                //Ensures start with an empty database.
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            }
+
             app.UseSwagger();
             app.UseSwaggerUI();
         }
