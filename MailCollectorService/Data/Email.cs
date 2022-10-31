@@ -2,10 +2,10 @@
 
 public class Email
 {
-    public string origin;
-    public string id;
-    public string threadId;
-    public IList<string> labelIds;
-    public string snippet;
-    public object payload;
+    public string Origin;
+    public string Id;
+    public string ThreadId;
+    public string LabelIds;
+    public string Snippet;
+    public string Payload;
 }
