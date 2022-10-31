@@ -11,5 +11,6 @@ namespace FrontEndNetMaui.Services
         public Task StopCollectingEmails();
 
         public Task<List<EmailData>> GetEmails();
+        Task DeleteEmails(List<EmailGroup> selectedGroupedEmails);
     }
 }

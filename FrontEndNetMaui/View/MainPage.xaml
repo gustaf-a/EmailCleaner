@@ -39,13 +39,15 @@
 
             <RadioButton
                     Content="Group by senders"
-                    CheckedChanged="OnGroupByClicked"/>
+                    CheckedChanged="OnGroupByClicked"
+                    IsChecked="True"/>
             <RadioButton
                     Content="Group by subjects"
                     CheckedChanged="OnGroupByClicked"/>
-            <RadioButton
+           <!--TODO Implement by tag sorting-->
+            <!--<RadioButton
                     Content="Group by tags"
-                    CheckedChanged="OnGroupByClicked"/>
+                    CheckedChanged="OnGroupByClicked"/>-->
         </HorizontalStackLayout>
 
         <ScrollView MaximumHeightRequest="400">
@@ -78,8 +80,9 @@
 
             <Button
                 x:Name="DeleteSelectedBtn"
-                Text="Collect Emails"
-                Command="{Binding DeleteSelectedCommand}"
+                Text="Delete Emails"
+                Command="{Binding DeleteSelectedClickedCommand}"
+                IsVisible ="false"
                 >
 
             </Button>

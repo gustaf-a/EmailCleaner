@@ -1,9 +1,4 @@
 ﻿using FrontEndNetMaui.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FrontEndNetMaui.Services
 {
@@ -64,6 +59,11 @@ namespace FrontEndNetMaui.Services
 
             IsCollecting = false;
 
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteEmails(List<EmailGroup> selectedGroupedEmails)
+        {
             return Task.CompletedTask;
         }
     }

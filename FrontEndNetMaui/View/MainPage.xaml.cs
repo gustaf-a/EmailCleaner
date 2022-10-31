@@ -15,7 +15,7 @@ public partial class MainPage : ContentPage
         _viewModel = viewModel;
     }
 
-    void OnEmailGroupsCollectionViewSelectionChanged(object sender, EventArgs e)
+    void OnEmailGroupsCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_viewModel is null)
             return;
@@ -23,17 +23,11 @@ public partial class MainPage : ContentPage
         if (sender is not CollectionView collectionView)
             return;
 
-        if (collectionView.SelectedItems.Count > 0)
-        {
-            //TODO Enable Action buttons
-            //update selected count
-        }
-    }
+        _viewModel.SelectedObjects = collectionView.SelectedItems.ToList();
 
-    void OnDeleteClicked(object sender, EventArgs e)
-    {
-        //Todo get items from collectionView SelectedItems
+        var itemsAreSelected = collectionView.SelectedItems.Count > 0;
 
+        DeleteSelectedBtn.IsVisible = itemsAreSelected;
     }
 
     void OnGroupByClicked(object sender, EventArgs e)

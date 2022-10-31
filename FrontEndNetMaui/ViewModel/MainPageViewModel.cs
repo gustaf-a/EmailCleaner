@@ -25,13 +25,16 @@ public partial class MainPageViewModel : BaseViewModel
 
         isCollectingEmails = true;
 
+        //TODO Remove and use empty object in view?
         GroupedEmails = new()
         {
             new EmailGroup(GroupMethod.None)
             {
-                Emails = new(){ new() { Id = 0, SenderAddress = "Addresstext", Subject = "Subjecttext"} }
+                Emails = new(){ new() { Id = 0, SenderAddress = "Address text", Subject = "Subject text"} }
             }
         };
+
+        SelectedObjects = new();
 
         SetAndUpdateGroupByClicked(GroupMethod.Sender);
     }
@@ -46,6 +49,8 @@ public partial class MainPageViewModel : BaseViewModel
 
     [ObservableProperty]
     public ObservableCollection<EmailGroup> groupedEmails;
+
+    internal List<object> SelectedObjects;
 
     [RelayCommand]
     async Task StartCollectEmailsClickedAsync()
@@ -141,6 +146,8 @@ public partial class MainPageViewModel : BaseViewModel
                 groupedEmailsObservable.Add(emailGroup);
 
             GroupedEmails = groupedEmailsObservable;
+
+            SelectedObjects = new();
         }
         catch (Exception)
         {
@@ -153,10 +160,30 @@ public partial class MainPageViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    async Task DeleteSelectedCommand()
+    async Task DeleteSelectedClickedAsync()
     {
-        //TODO get selected
+        if (isBusy)
+            return;
 
-        //Send to correct service, probably MailCollectorService which should be renamed
+        isBusy = true;
+
+        try
+        {
+            var selectedEmails = SelectedObjects.Select(g => g as EmailGroup).ToList();
+
+            await _apiGatewayService.DeleteEmails(selectedEmails);
+            
+            //TODO Delete from cached collection
+
+            UpdateGroupedEmails();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Exception thrown when trying to delete emails collecting.");
+        }
+        finally
+        {
+            isBusy = false;
+        }
     }
 }
