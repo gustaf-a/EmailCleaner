@@ -1,11 +1,12 @@
 ﻿using MailProviderService.Data;
 using MailProviderService.Repository;
+using Serilog;
 
 namespace MailProviderService.EmailStore
 {
     public class EmailStoreV1 : IEmailStore
     {
-        private IEmailRepository _repository;
+        private readonly IEmailRepository _repository;
 
         public EmailStoreV1(IEmailRepository repository)
         {
@@ -19,7 +20,11 @@ namespace MailProviderService.EmailStore
 
         public async Task<List<Email>> GetEmails()
         {
-            return await _repository.GetAll();
+            var emails = await _repository.GetAll();
+
+            Log.Information($"Providing {emails.Count} emails.");
+
+            return emails;
         }
 
         public async Task StoreEmails(List<Email> emails)
