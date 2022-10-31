@@ -1,6 +1,6 @@
 # EmailCleaner
 
-An application which collects emails and groups them in different ways to make it easy to clean the inbox.
+Work in process: An application which collects emails and groups them in different ways to make it easy to clean the inbox.
 This is a practice project built with a tech stack and architecture best suited for my own curiosity 
 and learning rather than performance.
 
@@ -27,9 +27,18 @@ Runs a collector which retrieves emails and publishes the emails to the RabbitMQ
 Here's a good guide for more indepth instructions:
 https://itnext.io/how-to-build-an-event-driven-asp-net-core-microservice-architecture-e0ef2976f33f
 
+### SQL Server container for MailProviderService
+
+1. Start a docker container with SQL Server
+2. Modify the connectionstring in appsetting.json with correct password.
+
+Here's a good guide for more in depth help:
+https://www.twilio.com/blog/containerize-your-sql-server-with-docker-and-aspnet-core-with-ef-core
+
 ### MailProviderService
 
-1. Add MessageQueue options to appsettings in MailProviderService. Get exchange from RabbitMQ queue created.
+1. Add connectionstring
+2. Add MessageQueue options to appsettings in MailProviderService. Get exchange from RabbitMQ queue created.
 
 Example MessageQueue-section from appsettings.json in MailProviderService:
 ```
@@ -80,14 +89,13 @@ Example Gmail-section from appsettings.json in MailCollectorService:
 
 - Implement an authentication microservice for when connecting with the gateway, for example with JWT auth.
 
-
 ### MailCollectorService
 
 - Use batch requests instead. No difference for limit per minute, but faster.
 - Download attachments?
-- 
+- Enable delete emails
 
 ### MailProviderService
 
-- 
+- Check routing key from message queue to enable delete
 
