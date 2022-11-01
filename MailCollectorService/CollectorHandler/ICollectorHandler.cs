@@ -1,8 +1,7 @@
-﻿namespace MailCollectorService.CollectorHandler
+﻿namespace MailCollectorService.CollectorHandler;
+
+public interface ICollectorHandler
 {
-    public interface ICollectorHandler
-    {
-        public void StartCollector();
-        public void StopCollector();
-    }
+    public void StartCollector();
+    public void StopCollector();
 }
