@@ -21,10 +21,10 @@ public class RabbitMqMessageConsumerV1 : DefaultBasicConsumer
     {
         Log.Information($"Message collected: {routingKey}");
 
-        if (!body.TryParseListOf<Email>(out var emails))
-            throw new Exception("Failed to parse message body.");
-
-        _emailStore.StoreEmails(emails);
+        if (body.TryParseListOf<Email>(out var emails))
+            _emailStore.StoreEmails(emails);
+        else
+            Log.Error($"Failed to parse message from queue into emails: {body}");
 
         _channel.BasicAck(deliveryTag, false);
     }
