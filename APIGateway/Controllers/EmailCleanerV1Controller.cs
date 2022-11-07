@@ -1,14 +1,19 @@
 ﻿using APIGateway.Data;
+using APIGateway.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIGateway.Controllers;
 
-[Route("/emailcleaner/v1")]
+[Route("v1/emailcleaner")]
 public class EmailCleanerV1Controller : Controller
 {
-    public EmailCleanerV1Controller()
-    {
+    private readonly IMailCollectorService _mailCollectorService;
+    private readonly IMailProviderService _mailProviderService;
 
+    public EmailCleanerV1Controller(IMailCollectorService mailCollectorService, IMailProviderService mailProviderService)
+    {
+        _mailCollectorService = mailCollectorService;
+        _mailProviderService = mailProviderService;
     }
 
     [HttpGet]
@@ -16,27 +21,20 @@ public class EmailCleanerV1Controller : Controller
         => "pong";
 
     [HttpGet("collect/start")]
-    public async Task<bool> StartCollecting()
+    public async Task StartCollecting()
     {
-
-        return true;
+        await _mailCollectorService.StartCollecting();
     }
 
     [HttpGet("collect/stop")]
-    public async Task<bool> StopCollecting()
+    public async Task StopCollecting()
     {
-        return true;
+        await _mailCollectorService.StopCollecting();
     }
 
     [HttpGet("collect")]
     public async Task<List<Email>> GetCollectedEmails()
     {
-        return new() 
-        { 
-            new Email()
-        };
+        return await _mailProviderService.GetCollectedEmails();
     }
-
-    //maybe through mailprovider?
-    //Download attachments(emailIds)
 }
