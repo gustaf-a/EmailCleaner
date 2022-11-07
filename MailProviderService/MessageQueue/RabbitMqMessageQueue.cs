@@ -15,14 +15,14 @@ namespace MailProviderService.MessageQueue
 
         private string _tag;
 
-        public RabbitMqMessageQueue(IConfiguration configuration, IChannelFactory channelBuilder, IMessageConsumerFactory messageConsumerFactory)
+        public RabbitMqMessageQueue(IConfiguration configuration, IChannelFactory channelFactory, IMessageConsumerFactory messageConsumerFactory)
         {
             _messageQueueOptions = configuration.GetSection(MessageQueueOptions.MessageQueue).Get<MessageQueueOptions>();
 
-            _channel = channelBuilder.Create(_messageQueueOptions);
-
+            _channel = channelFactory.Create(_messageQueueOptions);
+            
             _channel.QueueDeclare(queue: _messageQueueOptions.RoutingKeyCollected,
-                                 durable: false,
+                                 durable: true,
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
