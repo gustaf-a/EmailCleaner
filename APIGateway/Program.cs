@@ -20,8 +20,10 @@ public class Program
 
         startup.Configure(app);
 
-        Log.Information("Startup finished. Starting service.");
+        var url = $"http://{Environment.GetEnvironmentVariable("SERVICE_NAME")}:{Environment.GetEnvironmentVariable("PORT")}";
 
-        app.Run();
+        Log.Information($"Starting on: {url}");
+
+        app.Run(url);
     }
 }

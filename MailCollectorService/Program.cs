@@ -7,9 +7,9 @@ public class Program
     public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();
+            .MinimumLevel.Information()
+            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day, shared: true)
+            .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +20,10 @@ public class Program
 
         startup.Configure(app);
 
-        Log.Information("Startup finished. Starting service.");
+        var url = $"http://{Environment.GetEnvironmentVariable("SERVICE_NAME")}:{Environment.GetEnvironmentVariable("PORT")}";
 
-        app.Run();
+        Log.Information($"Starting on: {url}");
+
+        app.Run(url);
     }
 }
