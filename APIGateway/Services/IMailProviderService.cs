@@ -4,6 +4,8 @@ namespace APIGateway.Services
 {
     public interface IMailProviderService
     {
-        Task<List<Email>> GetCollectedEmails();
+        public Task<List<Email>> GetCollectedEmails();
+        public Task StartCollect();
+        public Task StopCollect();
     }
 }
