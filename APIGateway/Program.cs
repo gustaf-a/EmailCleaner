@@ -8,7 +8,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.File("apigateway.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +18,10 @@ public class Program
 
         var app = builder.Build();
 
-        startup.Configure(app, app.Environment);
+        startup.Configure(app);
+
+        Log.Information("Startup finished. Starting service.");
+
+        app.Run();
     }
 }

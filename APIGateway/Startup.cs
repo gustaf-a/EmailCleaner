@@ -1,4 +1,6 @@
-﻿namespace APIGateway
+﻿using APIGateway.Services;
+
+namespace APIGateway
 {
     public class Startup
     {
@@ -23,9 +25,12 @@
             });
 
             services.AddHttpClient();
+
+            services.AddSingleton<IMailCollectorService, MailCollectorServiceV1>();
+            services.AddSingleton<IMailProviderService, MailProviderServiceV1>();
         }
 
-        public void Configure(WebApplication app, IWebHostEnvironment env)
+        public void Configure(WebApplication app)
         {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -37,8 +42,6 @@
             app.UseAuthorization();
 
             app.MapControllers();
-
-            app.Run();
         }
     }
 }

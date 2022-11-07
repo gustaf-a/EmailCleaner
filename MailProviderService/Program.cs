@@ -1,13 +1,14 @@
 using Serilog;
 
 namespace MailProviderService;
+
 public class Program
 {
     public static void Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,12 @@ public class Program
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services);
 
-        startup.Configure(builder.Build());
+        var app = builder.Build();
+
+        startup.Configure(app);
+
+        Log.Information("Startup finished. Starting service.");
+
+        app.Run();
     }
 }

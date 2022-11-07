@@ -4,6 +4,7 @@ using MailProviderService.MessageConsumer;
 using MailProviderService.MessageQueue;
 using MailProviderService.Repository;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace MailProviderService;
 
@@ -21,9 +22,9 @@ public class Startup
         services.AddControllers();
 
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(s => 
+        services.AddSwaggerGen(s =>
         {
-            s.SwaggerDoc("v1", 
+            s.SwaggerDoc("v1",
                 new Microsoft.OpenApi.Models.OpenApiInfo { Title = "MailProviderService", Version = "v1" });
         });
 
@@ -36,13 +37,19 @@ public class Startup
         services.AddScoped<IMessageQueue, RabbitMqMessageQueue>();
 
         services.AddDbContext<MailProviderServiceContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("EmailDb")));
+            options.UseSqlServer(
+                Configuration.GetConnectionString("EmailDb"),
+                options => options.EnableRetryOnFailure(
+                    maxRetryCount: 4,
+                    maxRetryDelay: System.TimeSpan.FromSeconds(45),
+                    errorNumbersToAdd: null)
+                ));
     }
 
     public void Configure(WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
+        //if (app.Environment.IsDevelopment())
+        //{
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<MailProviderServiceContext>();
@@ -53,12 +60,10 @@ public class Startup
 
             app.UseSwagger();
             app.UseSwaggerUI();
-        }
+        //}
 
         app.UseAuthorization();
 
         app.MapControllers();
-
-        app.Run();
     }
 }

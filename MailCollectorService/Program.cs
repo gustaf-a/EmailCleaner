@@ -8,7 +8,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day, shared: true)
+                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +16,12 @@ public class Program
         var startup = new Startup(builder.Configuration);
         startup.ConfigureServices(builder.Services);
 
-        startup.Configure(builder.Build());
+        var app = builder.Build();
+
+        startup.Configure(app);
+
+        Log.Information("Startup finished. Starting service.");
+
+        app.Run();
     }
 }
