@@ -36,7 +36,6 @@ services:
             dockerfile: MailCollectorService/Dockerfile
         depends_on:
             - rabbitmq_emailcleaner
-            - mail-provider
         ports:
             - "5201:5201"
 
