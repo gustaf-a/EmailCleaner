@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MailProviderService;
 using MailProviderService.Data;
-using MailProviderService.MessageQueue;
 using MailProviderService.Repository;
 using MailProviderServiceTests.Mocks.MessageQueue;
 using MailProviderServiceTests.Mocks.Repository;
 using Newtonsoft.Json;
 using System.Text;
+using MailProviderService.MessageQueue;
 
 namespace MailProviderServiceTests.Controller;
 
@@ -30,7 +30,7 @@ public class MailProviderController_should
     public MailProviderController_should(WebApplicationFactory<Startup> factory)
     {
         _fakeModel = new FakeModel();
-        RabbitMqChannelFactoryMock.SetFakeModel(_fakeModel);
+        RabbitMqChannelHandlerMock.SetFakeModel(_fakeModel);
 
         //Context gets disposed when running tests, so using a FakeRepository as good enough solution.
         _repository = new FakeEmailRepository();
@@ -46,7 +46,7 @@ public class MailProviderController_should
 
                     SetupDb(services);
 
-                    services.AddScoped<IChannelFactory, RabbitMqChannelFactoryMock>();
+                    services.AddSingleton<IChannelHandler, RabbitMqChannelHandlerMock>();
 
                     if (_repository is null)
                         throw new Exception("Failed to initialize repository");

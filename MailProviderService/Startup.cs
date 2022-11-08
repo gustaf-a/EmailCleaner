@@ -30,17 +30,18 @@ public class Startup
 
         services.AddHttpClient();
 
-        services.AddScoped<IChannelFactory, RabbitMqChannelFactory>();
         services.AddScoped<IEmailStore, EmailStoreV1>();
         services.AddScoped<IEmailRepository, EmailRepositoryV1>();
         services.AddScoped<IMessageConsumerFactory, MessageConsumerFactory>();
         services.AddScoped<IMessageQueue, RabbitMqMessageQueue>();
 
+        services.AddSingleton<IChannelHandler, RabbitMqChannelHandler>();
+
         services.AddDbContext<MailProviderServiceContext>(options =>
             options.UseSqlServer(
                 Configuration.GetConnectionString("EmailDb"),
                 options => options.EnableRetryOnFailure(
-                    maxRetryCount: 4,
+                    maxRetryCount: 5,
                     maxRetryDelay: System.TimeSpan.FromSeconds(45),
                     errorNumbersToAdd: null)
                 ));

@@ -20,7 +20,7 @@ namespace MailProviderServiceTests.Mocks.MessageQueue
 
             _currentConsumer = consumer;
 
-            return queue; //TODO What return?
+            return queue;
         }
 
         public QueueDeclareOk QueueDeclare(string queue, bool durable, bool exclusive, bool autoDelete, IDictionary<string, object> arguments)

@@ -4,21 +4,31 @@ using RabbitMQ.Client;
 
 namespace MailProviderServiceTests.Mocks.MessageQueue;
 
-internal class RabbitMqChannelFactoryMock : IChannelFactory
+public class RabbitMqChannelHandlerMock : IChannelHandler
 {
-    private static IModel _fakeModel;
+    private static IModel _fakeModel = null;
 
     public static void SetFakeModel(IModel fakeModel)
         => _fakeModel = fakeModel;
 
-    public RabbitMqChannelFactoryMock()
+    public RabbitMqChannelHandlerMock()
     {
-        if (_fakeModel is null)
-            throw new Exception($"FakeModel must be set before creating instances of {nameof(RabbitMqChannelFactoryMock)}");
     }
 
     public IModel Create(MessageQueueOptions messageQueueOptions)
     {
         return _fakeModel;
+    }
+
+    public IModel GetChannel()
+        => _fakeModel;
+
+    public void StartCollecting(IBasicConsumer consumer)
+    {
+        _fakeModel.BasicConsume("", false, consumer);
+    }
+
+    public void StopCollecting()
+    {
     }
 }
