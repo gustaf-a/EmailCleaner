@@ -16,8 +16,6 @@ public class RabbitMqMessageQueueV1 : IMessageQueue
         var factory = new ConnectionFactory(){ HostName = messageQueueOptions.HostName };
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
-
-        ////Default port for RabbitMQ is used: 5672
     }
 
     public void PublishToQueue(string exchange, string routingKey, object messageData)

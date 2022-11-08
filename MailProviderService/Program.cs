@@ -1,3 +1,4 @@
+using MailProviderService.Configuration;
 using Serilog;
 
 namespace MailProviderService;
@@ -20,10 +21,19 @@ public class Program
 
         startup.Configure(app);
 
-        var url = $"http://{Environment.GetEnvironmentVariable("SERVICE_NAME")}:{Environment.GetEnvironmentVariable("PORT")}";
+        app.Run(GetUrl(builder.Configuration));
+    }
+
+    private static string GetUrl(IConfiguration config)
+    {
+        var serviceOptions = config.GetSection(ServiceOptions.Service).Get<ServiceOptions>();
+
+        var url = serviceOptions.ApplicationUrl;
+        if (string.IsNullOrWhiteSpace(url))
+            throw new Exception("Unable to find value for ApplicationUrl in appsettings");
 
         Log.Information($"Starting on: {url}");
 
-        app.Run(url);
+        return url;
     }
 }

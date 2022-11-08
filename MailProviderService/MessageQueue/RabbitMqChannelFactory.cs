@@ -8,7 +8,7 @@ public class RabbitMqChannelFactory : IChannelFactory
     public IModel Create(MessageQueueOptions messageQueueOptions)
     {
         var factory = new ConnectionFactory() { HostName = messageQueueOptions.HostName };
-        using var connection = factory.CreateConnection();
+        var connection = factory.CreateConnection();
 
         return connection.CreateModel();
     }

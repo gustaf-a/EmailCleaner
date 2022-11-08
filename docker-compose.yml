@@ -1,0 +1,63 @@
+version: '3.4'
+
+services:
+    
+    db_emailcleaner:
+        image: "mcr.microsoft.com/mssql/server"
+        container_name: db_emailcleaner
+        environment:
+            SA_PASSWORD: "1234%&PassWord"
+            ACCEPT_EULA: "Y"
+        restart: always
+        ports:
+            - "1433:1433"
+
+    rabbitmq_emailcleaner:
+        image: "rabbitmq:management-alpine"
+        container_name: rabbitmq_emailcleaner
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        volumes:
+            - type: bind
+              source: ./rabbitmq/enabled_plugins
+              target: /etc/rabbitmq/enabled-plugins
+            - type: bind
+              source: ./rabbitmq/rabbitmq.config
+              target: /etc/rabbitmq/rabbitmq.config
+            - type: bind
+              source: ./rabbitmq/definitions.json
+              target: /etc/rabbitmq/definitions.json
+
+    mail-collector:
+        container_name: mail-collector
+        build:
+            context: .
+            dockerfile: MailCollectorService/Dockerfile
+        depends_on:
+            - rabbitmq_emailcleaner
+            - mail-provider
+        ports:
+            - "5201:5201"
+
+    mail-provider:
+        container_name: mail-provider
+        build:
+            context: .
+            dockerfile: MailProviderService/Dockerfile
+        depends_on:
+            - db_emailcleaner
+            - rabbitmq_emailcleaner
+        ports:
+            - "5202:5202" 
+
+    apigateway:
+        container_name: apigateway
+        ports:
+            - "5200:5200"
+        build:
+            context: .
+            dockerfile: APIGateway/Dockerfile
+        depends_on:
+            - mail-collector
+            - mail-provider

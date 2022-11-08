@@ -4,6 +4,6 @@ public class ServicesOptions
 {
     public const string Services = "Services";
 
-    public string MailCollectorServiceUri { get; set; } = "http://localhost:5201/";
-    public string MailProviderServiceUri { get; set; } = "http://localhost:5202/";
+    public string MailCollectorServiceUri { get; set; } = string.Empty;
+    public string MailProviderServiceUri { get; set; } = string.Empty;
 }
