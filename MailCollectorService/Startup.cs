@@ -7,15 +7,15 @@ namespace MailCollectorService;
 
 public class Startup
 {
-	public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; }
 
-	public Startup(IConfiguration configuration)
-	{
-		Configuration = configuration;
-	}
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 
-	public void ConfigureServices(IServiceCollection services)
-	{
+    public void ConfigureServices(IServiceCollection services)
+    {
         // Add services to the container.
 
         services.AddControllers();
@@ -31,20 +31,16 @@ public class Startup
 
         services.AddSingleton<IEmailCollectorService, GmailCollectorService>();
         services.AddSingleton<IMessageQueue, RabbitMqMessageQueueV1>();
-        
+
         services.AddSingleton<IGmailRepository, GmailRepositoryV1>();
         services.AddSingleton<ICollectorHandler, CollectorHandler.CollectorHandler>();
 
     }
 
     public void Configure(WebApplication app)
-	{
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseAuthorization();
 

@@ -48,19 +48,16 @@ public class Startup
 
     public void Configure(WebApplication app)
     {
-        //if (app.Environment.IsDevelopment())
-        //{
-            using (var scope = app.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<MailProviderServiceContext>();
-                //Ensures start with an empty database.
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-            }
+        using (var scope = app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<MailProviderServiceContext>();
+            //Ensures start with an empty database.
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        //}
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseAuthorization();
 
