@@ -1,11 +1,15 @@
 ﻿using MailCollectorService.Data;
 using MailCollectorService.Repository;
+using Serilog;
 
 namespace MailCollectorService.Services;
 
 public class GmailCollectorService : IEmailCollectorService
 {
     private readonly IGmailRepository _gmailRepository;
+
+    private readonly int maxAttempts = 5;
+    private int currentAttempts;
 
     public GmailCollectorService(IGmailRepository gmailRepository)
     {
@@ -22,17 +26,25 @@ public class GmailCollectorService : IEmailCollectorService
             {
                 var undetailedMessages = await _gmailRepository.GetEmails(cancellationToken);
 
+                Log.Information($"Got list of {undetailedMessages.Count} messages.");
+
                 var detailedMessages = await _gmailRepository.GetEmailDetails(undetailedMessages, cancellationToken);
 
+                Log.Information($"Got {detailedMessages.Count} detailed messages.");
+                
                 return detailedMessages.ToEmailList();
             }
             catch (Exception ex)
             {
                 //TODO Check if is gmail exception
 
-                if (ShouldRetryOn(ex))
+                if (ShouldRetryOn())
+                {
+                    Log.Warning(ex, $"Exception caught. Retrying");
                     continue;
-                
+                }
+
+                Log.Error(ex, $"Exception encountered and no more retries left.");
                 throw;
             }
         } while (!cancellationToken.IsCancellationRequested);
@@ -40,16 +52,12 @@ public class GmailCollectorService : IEmailCollectorService
         return new();
     }
 
-    private readonly int maxAttempts = 5;
-    private int currentAttempts = 0;
-
-    private bool ShouldRetryOn(Exception ex)
+    private bool ShouldRetryOn()
     {
         if(currentAttempts > maxAttempts)
             return false;
 
         currentAttempts++;
-        //Pause before trying again
 
         return true;
     }
