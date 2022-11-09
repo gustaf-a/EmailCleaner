@@ -38,6 +38,8 @@ services:
             - rabbitmq_emailcleaner
         ports:
             - "5201:5201"
+        volumes:
+            - ./MailCollectorService/token.json:/app/token.json
 
     mail-provider:
         container_name: mail-provider
