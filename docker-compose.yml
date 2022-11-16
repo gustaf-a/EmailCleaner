@@ -29,6 +29,7 @@ services:
         ports:
             - "5201:5201"
         volumes:
+            - ./logs:/app/logs
             - ./MailCollectorService/token.json:/app/token.json
 
     mail-provider:
@@ -40,14 +41,18 @@ services:
             - rabbitmq_emailcleaner
         ports:
             - "5202:5202" 
+        volumes:
+            - ./logs:/app/logs
 
-    apigateway:
-        container_name: apigateway
-        ports:
-            - "5200:5200"
-        build:
-            context: .
-            dockerfile: APIGateway/Dockerfile
-        depends_on:
-            - mail-collector
-            - mail-provider
+    #apigateway:
+    #    container_name: apigateway
+    #    ports:
+    #        - "5200:5200"
+    #    build:
+    #        context: .
+    #        dockerfile: APIGateway/Dockerfile
+    #    depends_on:
+    #        - mail-collector
+    #        - mail-provider
+    #    volumes:
+    #        - ./logs:/app/logs
