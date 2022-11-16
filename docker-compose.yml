@@ -1,16 +1,6 @@
 version: '3.4'
 
 services:
-    
-    db_emailcleaner:
-        image: "mcr.microsoft.com/mssql/server"
-        container_name: db_emailcleaner
-        environment:
-            SA_PASSWORD: "1234%&PassWord"
-            ACCEPT_EULA: "Y"
-        restart: always
-        ports:
-            - "1433:1433"
 
     rabbitmq_emailcleaner:
         image: "rabbitmq:management-alpine"
@@ -47,7 +37,6 @@ services:
             context: .
             dockerfile: MailProviderService/Dockerfile
         depends_on:
-            - db_emailcleaner
             - rabbitmq_emailcleaner
         ports:
             - "5202:5202" 

@@ -3,6 +3,7 @@ using MailProviderService.EmailStore;
 using MailProviderService.MessageConsumer;
 using MailProviderService.MessageQueue;
 using MailProviderService.Repository;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -37,26 +38,37 @@ public class Startup
 
         services.AddSingleton<IChannelHandler, RabbitMqChannelHandler>();
 
-        services.AddDbContext<MailProviderServiceContext>(options =>
-            options.UseSqlServer(
-                Configuration.GetConnectionString("EmailDb"),
-                options => options.EnableRetryOnFailure(
-                    maxRetryCount: 5,
-                    maxRetryDelay: System.TimeSpan.FromSeconds(45),
-                    errorNumbersToAdd: null)
-                ));
+        RegisterSqliteInMemoryTestContext<MailProviderServiceContext>(services);
+        SetupDb(services);
+    }
+
+    private static void SetupDb(IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+
+        using (var scope = serviceProvider.CreateScope())
+        {
+            var scopedServices = scope.ServiceProvider;
+
+            var db = scopedServices.GetRequiredService<MailProviderServiceContext>();
+            db.Database.EnsureCreated();
+        };
+    }
+
+    private static void RegisterSqliteInMemoryTestContext<T>(IServiceCollection services) where T : DbContext
+    {
+        var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+
+        services.AddDbContext<T>(
+            options =>
+            {
+                options.UseSqlite(connection);
+            }, ServiceLifetime.Singleton);
     }
 
     public void Configure(WebApplication app)
     {
-        using (var scope = app.Services.CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<MailProviderServiceContext>();
-            //Ensures start with an empty database.
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-        }
-
         app.UseSwagger();
         app.UseSwaggerUI();
 

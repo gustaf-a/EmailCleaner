@@ -16,13 +16,16 @@ public class EmailRepositoryV1 : IEmailRepository
     public async Task Add(List<Email> emails)
     {
         if (emails is null || emails.Count == 0)
+        {
+            Log.Warning($"Received 0 emails to add. Ignoring request.");
             return;
+        }
 
         Log.Information($"Adding {emails.Count} emails to database.");
 
         try
         {
-            _context.Email.AddRange(emails);
+            _context.Emails.AddRange(emails);
 
             await _context.SaveChangesAsync();
 
@@ -39,6 +42,12 @@ public class EmailRepositoryV1 : IEmailRepository
 
     public async Task Delete(List<Email> emails)
     {
+        if (emails is null || emails.Count == 0)
+        {
+            Log.Warning($"Received 0 emails to remove. Ignoring request.");
+            return;
+        }
+
         Log.Information($"Removing {emails.Count} emails.");
 
         _context.RemoveRange(emails);
@@ -52,7 +61,7 @@ public class EmailRepositoryV1 : IEmailRepository
 
     public async Task<List<Email>> GetAll()
     {
-        var emails = await _context.Email.ToListAsync();
+        var emails = await _context.Emails.ToListAsync();
 
         if (emails is null)
         {
