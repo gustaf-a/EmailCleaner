@@ -1,4 +1,3 @@
-using MailProviderService.Configuration;
 using Serilog;
 
 namespace MailProviderService;
@@ -9,7 +8,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("logs/mailprovider.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);

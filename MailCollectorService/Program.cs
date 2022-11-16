@@ -8,7 +8,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day, shared: true)
+            .WriteTo.File("logs/mailcollector.txt", rollingInterval: RollingInterval.Day, shared: true)
             .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);

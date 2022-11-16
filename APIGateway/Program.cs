@@ -8,7 +8,7 @@ public class Program
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
-            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("logs/apigateway.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
