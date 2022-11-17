@@ -24,12 +24,14 @@ public class EmailCleanerV1Controller : Controller
     public async Task StartCollecting()
     {
         await _mailCollectorService.StartCollecting();
+        await _mailProviderService.StartCollecting();
     }
 
     [HttpGet("collect/stop")]
     public async Task StopCollecting()
     {
         await _mailCollectorService.StopCollecting();
+        await _mailProviderService.StopCollecting();
     }
 
     [HttpGet("collect")]
