@@ -46,12 +46,12 @@ namespace APIGateway.Services
             return emails;
         }
 
-        public async Task StartCollect()
+        public async Task StartCollecting()
         {
             await _httpClient.GetAsync(CollectStartRoute);
         }
 
-        public async Task StopCollect()
+        public async Task StopCollecting()
         {
             await _httpClient.GetAsync(CollectStopRoute);
         }
