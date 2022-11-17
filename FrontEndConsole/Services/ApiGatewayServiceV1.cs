@@ -41,6 +41,9 @@ public class ApiGatewayServiceV1 : IApiGatewayService
 
     public async Task StartCollecting()
     {
+        Log.Information("Sending request to start collecting emails.");
+
+        Log.Information("Fake request sent.");
         //TODO
         _httpClient.BaseAddress = new Uri($"http:/{_applicationOptions.ApiGatewayHostName}/{port}/v1/emailcleaner/collect/start");
         return;
@@ -48,7 +51,11 @@ public class ApiGatewayServiceV1 : IApiGatewayService
 
     public async Task StopCollecting()
     {
+        Log.Information("Sending request to stop collecting emails.");
         //Todo Call ApiGatewayService
+        
+        Log.Information("Fake request sent.");
+        
         return;
     }
 }
