@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace FrontEndConsole.Services;
 
-internal class ApiGatewayServiceV1 : IApiGatewayService
+public class ApiGatewayServiceV1 : IApiGatewayService
 {
     private readonly HttpClient _httpClient;
 

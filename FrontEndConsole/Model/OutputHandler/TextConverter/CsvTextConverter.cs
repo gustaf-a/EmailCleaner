@@ -16,6 +16,27 @@ public class CsvTextConverter : ITextConverter
 
     private const int NumberOfCells = 4;
 
+    public string GetInstructions(List<string> emailActionsInstructionLines)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine($"To mark a line for processing, add the requested symbol in the beginning of the line between the '{MarkingCellSymbolFirst} {MarkingCellSymbolLast}'.");
+        sb.AppendLine("Spaces are trimmed away.");
+        sb.AppendLine("");
+        sb.AppendLine("Marked cell example (replace x with the needed code/command):");
+        sb.AppendLine($"{MarkingCellSymbolFirst} x {MarkingCellSymbolLast}");
+        sb.AppendLine("");
+        sb.AppendLine("Not marked cell (no action executed):");
+        sb.AppendLine($"{MarkingCellSymbolFirst}  {MarkingCellSymbolLast}");
+        sb.AppendLine("");
+
+        sb.AppendLine("-- Available commands --");
+        foreach (var instructionLine in emailActionsInstructionLines)
+           sb.AppendLine(instructionLine);
+
+        return sb.ToString();
+    }
+
     public MarkedEmailGroup Deserialize(string text)
     {
         var cells = text.Split(CellSeparator);

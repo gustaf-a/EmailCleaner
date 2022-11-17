@@ -1,5 +1,6 @@
 ﻿using EmailCleaner.Client.Data;
 using FrontEndConsole.Model.Configuration;
+using FrontEndConsole.Model.EmailActionProvider;
 using FrontEndConsole.Model.OutputHandler.TextConverter;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -13,15 +14,19 @@ internal class FileSystemOutputhandlerV1 : IOutputHandler
 
     private const string FileEnding = ".txt";
 
+    private const string InstructionsFileName = "instructions.txt";
+
     private readonly ApplicationOptions _applicationOptions;
 
     private readonly string _outputBaseDirectory;
 
-    public FileSystemOutputhandlerV1(IConfiguration configuration, ITextConverter textConverter)
-    {
-        _textConverter = textConverter;
+    private readonly IEmailActionProvider _emailActionProvider;
 
+    public FileSystemOutputhandlerV1(IConfiguration configuration, ITextConverter textConverter, IEmailActionProvider emailActionProvider)
+    {
         _applicationOptions = configuration.GetSection(ApplicationOptions.Application).Get<ApplicationOptions>();
+        _emailActionProvider = emailActionProvider;
+        _textConverter = textConverter;
 
         _outputBaseDirectory = _applicationOptions.OutputDirectory;
 
@@ -61,11 +66,14 @@ internal class FileSystemOutputhandlerV1 : IOutputHandler
             savedFilePaths.Add(fileName);
         }
 
+        await CreateInstructionsFile(outputDirectory);
+
         if (_applicationOptions.ShowOutputDirectoryAfterActions)
             Show(outputDirectory);
 
         return savedFilePaths;
     }
+
 
     private static string GetSessionDirectory()
         => DateTime.Now.ToString("yyyyMMddTHHmmss");
@@ -88,6 +96,21 @@ internal class FileSystemOutputhandlerV1 : IOutputHandler
         }
 
         return true;
+    }
+
+    private async Task CreateInstructionsFile(string outputDirectory)
+    {
+        try
+        {
+            using var streamWriter = new StreamWriter(Path.Combine(_outputBaseDirectory, InstructionsFileName));
+
+            await streamWriter.WriteAsync(_textConverter.GetInstructions(_emailActionProvider.GetEmailActionInstructions()));
+        }
+        catch (Exception)
+        {
+            //Best effort only.
+            Log.Warning($"Failed to write instructions file to output folder {outputDirectory}.");
+        }
     }
 
     public void Show(string path)

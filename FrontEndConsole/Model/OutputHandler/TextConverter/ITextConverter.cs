@@ -6,5 +6,6 @@ namespace FrontEndConsole.Model.OutputHandler.TextConverter
     {
         public string Serialize(EmailGroup emailGroup);
         public MarkedEmailGroup Deserialize(string text);
+        public string GetInstructions(List<string> emailActionDescriptions);
     }
 }
