@@ -1,6 +1,5 @@
 ﻿using APIGateway.Configuration;
 using APIGateway.Data;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace APIGateway.Services
@@ -29,7 +28,9 @@ namespace APIGateway.Services
 
         public async Task<List<Email>> GetCollectedEmails()
         {
-            var response = await _httpClient.GetAsync(GetEmailsRoute); ;
+            Log.Information($"Sending requst for emails from {GetEmailsRoute}.");
+
+            var response = await _httpClient.GetAsync(GetEmailsRoute);
             response.EnsureSuccessStatusCode();
 
             if (response.Content is null)
@@ -43,17 +44,21 @@ namespace APIGateway.Services
             if (emails is null)
                 Log.Error($"Failed to convert to list of emails from response content: {response.Content}");
 
+            Log.Information($"Collected {emails.Count} emails from provider.");
+
             return emails;
         }
 
         public async Task StartCollecting()
         {
             await _httpClient.GetAsync(CollectStartRoute);
+            Log.Information($"Requested start from {CollectStartRoute}");
         }
 
         public async Task StopCollecting()
         {
             await _httpClient.GetAsync(CollectStopRoute);
+            Log.Information($"Requested stop from {CollectStopRoute}");
         }
     }
 }

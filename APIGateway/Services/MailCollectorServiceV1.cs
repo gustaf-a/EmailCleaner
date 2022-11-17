@@ -1,4 +1,5 @@
 ﻿using APIGateway.Configuration;
+using Serilog;
 
 namespace APIGateway.Services
 {
@@ -19,17 +20,19 @@ namespace APIGateway.Services
 
             _httpClient = httpClientFactory.CreateClient();
 
-            _httpClient.BaseAddress = new Uri(_servicesOptions.MailProviderServiceUri + BaseV1Route);
+            _httpClient.BaseAddress = new Uri(_servicesOptions.MailCollectorServiceUri + BaseV1Route);
         }
 
         public async Task StartCollecting()
         {
             await _httpClient.GetAsync(CollectStartRoute);
+            Log.Information($"Requested start from {CollectStartRoute}");
         }
 
         public async Task StopCollecting()
         {
             await _httpClient.GetAsync(CollectStopRoute);
+            Log.Information($"Requested stop from {CollectStartRoute}");
         }
     }
 }
