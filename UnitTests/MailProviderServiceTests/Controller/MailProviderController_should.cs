@@ -48,9 +48,6 @@ public class MailProviderController_should
 
                     services.AddSingleton<IChannelHandler, RabbitMqChannelHandlerMock>();
 
-                    if (_repository is null)
-                        throw new Exception("Failed to initialize repository");
-
                     services.AddSingleton<IEmailRepository>(_repository);
                 });
             }
