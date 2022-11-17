@@ -14,6 +14,6 @@ internal class ApplicationOptions
     public List<string> ExistingFilePaths { get; set; } = new();
 
     public const string DefaultOutputDirectory = "output";
-    public string OutputDirectory { get; set; } = string.Empty;
+    public string OutputDirectory { get; set; } = DefaultOutputDirectory;
     public bool ShowOutputDirectoryAfterActions { get; set; } = true;
 }

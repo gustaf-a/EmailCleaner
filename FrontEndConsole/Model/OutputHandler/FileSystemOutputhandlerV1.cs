@@ -9,7 +9,7 @@ namespace FrontEndConsole.Model.OutputHandler;
 
 internal class FileSystemOutputhandlerV1 : IOutputHandler
 {
-    private readonly ITextConverter _textConverter; 
+    private readonly ITextConverter _textConverter;
 
     private const string FileEnding = ".txt";
 
@@ -25,12 +25,18 @@ internal class FileSystemOutputhandlerV1 : IOutputHandler
 
         _outputBaseDirectory = _applicationOptions.OutputDirectory;
 
-        if (string.IsNullOrWhiteSpace(_outputBaseDirectory) || !Directory.Exists(_outputBaseDirectory))
-            _outputBaseDirectory = Path.Combine(Directory.GetCurrentDirectory(), ApplicationOptions.DefaultOutputDirectory);
+        if (!Path.IsPathFullyQualified(_outputBaseDirectory))
+        {
+            if (string.IsNullOrWhiteSpace(_outputBaseDirectory))
+                _outputBaseDirectory = ApplicationOptions.DefaultOutputDirectory;
+
+            _outputBaseDirectory = Path.Combine(Directory.GetCurrentDirectory(), _outputBaseDirectory);
+        }
 
         if (!Directory.Exists(_outputBaseDirectory))
         {
             Log.Information($"Output directory not found. Creating directory {_outputBaseDirectory}");
+
             Directory.CreateDirectory(_outputBaseDirectory);
         }
     }
@@ -83,13 +89,13 @@ internal class FileSystemOutputhandlerV1 : IOutputHandler
 
         return true;
     }
-    
+
     public void Show(string path)
     {
         if (!string.Empty.Equals(Path.GetExtension(path)))
             path = Path.GetDirectoryName(path);
 
-        if(path is null)
+        if (path is null)
         {
             Log.Error($"Failed to find directory path from: {path}");
             return;
