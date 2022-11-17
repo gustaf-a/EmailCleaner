@@ -24,7 +24,8 @@ namespace APIGateway
                     new Microsoft.OpenApi.Models.OpenApiInfo { Title = "APIGateway", Version = "v1" });
             });
 
-            services.AddHttpClient();
+            services.AddHttpClient<IMailCollectorService, MailCollectorServiceV1>();
+            services.AddHttpClient<IMailProviderService, MailProviderServiceV1>();
 
             services.AddSingleton<IMailCollectorService, MailCollectorServiceV1>();
             services.AddSingleton<IMailProviderService, MailProviderServiceV1>();
