@@ -14,15 +14,21 @@ internal class ProcessGroupedEmailFileAppAction : IAppAction
     private readonly IOutputHandler _outputHandler;
     private readonly IEmailActionProvider _emailActionProvider;
 
+    private readonly string EmptyCodeActionKey;
+
     public ProcessGroupedEmailFileAppAction(AppActionOptions appActionOptions, IOutputHandler outputHandler, IEmailActionProvider emailActionProvider)
     {
         _appActionOptions = appActionOptions;
         _outputHandler = outputHandler;
         _emailActionProvider = emailActionProvider;
+
+        EmptyCodeActionKey = _emailActionProvider.GetEmailAction(string.Empty).GetCodes().Last();
     }
 
     public async Task<AppActionResult> Execute(IMainUserInterface mainUI)
     {
+        Log.Information($"Starting to process files.");
+
         if (!_appActionOptions.ExistingFilePaths.Any())
             throw new Exception("No filepaths for processing found.");
 
@@ -71,7 +77,7 @@ internal class ProcessGroupedEmailFileAppAction : IAppAction
                 var key = markedEmailGroupKeyValuePair.Key;
 
                 if (string.IsNullOrWhiteSpace(key))
-                    continue;
+                    key = EmptyCodeActionKey;
 
                 //TODO Avoid duplicates?
                 if (!allEmailsSortedByActionCode.ContainsKey(key))
