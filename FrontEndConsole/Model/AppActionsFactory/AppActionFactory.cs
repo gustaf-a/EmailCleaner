@@ -27,29 +27,18 @@ internal class AppActionFactory : IAppActionFactory
     }
 
     public IAppAction Create(ApplicationAction applicationAction)
-    {
-        var appActionOptions = new AppActionOptions
-        {
-            CollectTimeout = TimeSpan.FromSeconds(_applicationOptions.CollectTimeout),
-            AfterCollectingStoppedDelay = TimeSpan.FromSeconds(_applicationOptions.AfterCollectingStoppedDelay),
-            ExistingFilePaths = _applicationOptions.ExistingFilePaths
-        };
-
-        return Create(applicationAction, appActionOptions);
-    }
+        => Create(applicationAction, GetAppActions());
 
     public IAppAction Create(ApplicationAction applicationAction, AppActionResult appActionResult)
-    {
-        var appActionOptions = new AppActionOptions
+        => Create(applicationAction, GetAppActions(appActionResult.FilePaths));
+
+    private AppActionOptions GetAppActions(List<string> filePaths = null)
+        => new()
         {
             CollectTimeout = TimeSpan.FromSeconds(_applicationOptions.CollectTimeout),
             AfterCollectingStoppedDelay = TimeSpan.FromSeconds(_applicationOptions.AfterCollectingStoppedDelay),
-
-            ExistingFilePaths = appActionResult.FilePaths
+            ExistingFilePaths = filePaths ?? _applicationOptions.ExistingFilePaths
         };
-
-        return Create(applicationAction, appActionOptions);
-    }
 
     public IAppAction Create(ApplicationAction applicationAction, AppActionOptions appActionOptions)
     {
@@ -62,7 +51,7 @@ internal class AppActionFactory : IAppActionFactory
                 => new ProcessGroupedEmailFileAppAction(appActionOptions, _outputHandler, _emailActionProvider),
 
             ApplicationAction.StartMenuAction
-                => new StartMenuAppAction(appActionOptions), 
+                => new StartMenuAppAction(appActionOptions),
 
             ApplicationAction.ExitApplicationAction
                 => new ExitAppAction(),
@@ -70,6 +59,4 @@ internal class AppActionFactory : IAppActionFactory
             _ => throw new Exception($"Unrecognized Application Action: {applicationAction}"),
         };
     }
-
-
 }

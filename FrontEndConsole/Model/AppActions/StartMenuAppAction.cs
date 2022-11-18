@@ -16,7 +16,7 @@ internal class StartMenuAppAction : IAppAction
         _menuAlternatives = new()
         {
             { "Collect emails", ApplicationAction.CollectEmailsAction },
-            //{ "Process existing file", ApplicationAction.ProcessGroupedEmailFileAction },
+            { "Process existing file", ApplicationAction.ProcessGroupedEmailFileAction },
             { "Exit", ApplicationAction.ExitApplicationAction }
         };
     }
@@ -33,12 +33,6 @@ internal class StartMenuAppAction : IAppAction
             throw new Exception($"Failed to parse result from UI menu: {pickedKey}");
 
         var pickedAppAction = _menuAlternatives[pickedKey];
-
-        if(ApplicationAction.ProcessGroupedEmailFileAction.Equals(pickedAppAction))
-        {
-            //TODO get filepaths and send in
-            throw new NotImplementedException("Please use appsettings.json to directly specify filepaths.");
-        }
 
         return Task.FromResult(new AppActionResult(pickedAppAction));
     }

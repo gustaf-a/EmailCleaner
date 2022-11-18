@@ -5,6 +5,7 @@ using FrontEndConsole.Model.EmailActions;
 using FrontEndConsole.Model.OutputHandler;
 using FrontEndConsole.View;
 using Serilog;
+using System.Text;
 
 namespace FrontEndConsole.Model.AppActions;
 
@@ -15,6 +16,11 @@ internal class ProcessGroupedEmailFileAppAction : IAppAction
     private readonly IEmailActionProvider _emailActionProvider;
 
     private readonly string EmptyCodeActionKey;
+
+    private readonly List<string> AddFilePathsToAppsettingsAlternatives = new() { "Ok" };
+
+    private readonly List<string> ConfirmStartProcessingAlternatives = new() { "Start processing", "Cancel" };
+    private const int CancelAlternativeIndex = 1;
 
     public ProcessGroupedEmailFileAppAction(AppActionOptions appActionOptions, IOutputHandler outputHandler, IEmailActionProvider emailActionProvider)
     {
@@ -27,25 +33,34 @@ internal class ProcessGroupedEmailFileAppAction : IAppAction
 
     public async Task<AppActionResult> Execute(IMainUserInterface mainUI)
     {
-        Log.Information($"Starting to process files.");
+        mainUI.Clear();
+        mainUI.SetStatus("Processing files with emailgroups");
+        Log.Information($"Processing files with emailgroups");
 
         if (!_appActionOptions.ExistingFilePaths.Any())
-            throw new Exception("No filepaths for processing found.");
+        {
+            var filePathsAddedReply = mainUI.ShowMenu("No filepaths found in appsettings.json. Please add at least one filepath under ExistingFilePaths and try again.", AddFilePathsToAppsettingsAlternatives);
+            
+            return new AppActionResult(ApplicationAction.None);
+        }
 
         var markedEmailGroupWithEmailAction = await GetMarkedEmailGroupsSortedByEmailAction(_appActionOptions.ExistingFilePaths);
 
-        //TODO Ask for confirmation
+        var reply = mainUI.ShowMenu(GetConfirmProcessingPrompt(markedEmailGroupWithEmailAction), ConfirmStartProcessingAlternatives);
+        if (ConfirmStartProcessingAlternatives[CancelAlternativeIndex].Equals(reply))
+        {
+            Log.Information("User canceled before any email action started.");
+            return new AppActionResult(ApplicationAction.None);
+        }
 
-        //TODO unknown actions handling
-
-        Log.Information("Starting actions.");
+        Log.Information("Starting email actions.");
 
         foreach (var emailActionMarkedEmailsPair in markedEmailGroupWithEmailAction)
         {
             var emailAction = emailActionMarkedEmailsPair.Key;
             var emails = emailActionMarkedEmailsPair.Value;
 
-            Log.Information($"Executing following action on {emails.Count} emails: {emailAction.GetDescription}.");
+            Log.Information($"Executing action on {emails.Count} emails: {emailAction.GetDescription}.");
 
             var request = new EmailActionRequest
             {
@@ -54,10 +69,22 @@ internal class ProcessGroupedEmailFileAppAction : IAppAction
 
             var result = await emailAction.Execute(request);
 
-            Log.Information($"Action following action on {emails.Count} emails: {emailAction.GetDescription}.");
+            Log.Information($"Action finished: {emailAction.GetDescription}.");
         }
 
         return new AppActionResult(ApplicationAction.None);
+    }
+
+    private static string GetConfirmProcessingPrompt(SortedDictionary<IEmailAction, List<MarkedEmailGroup>> markedEmailGroupWithEmailAction)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine("Found email groups marked for processing:");
+
+        foreach (var keyValuePair in markedEmailGroupWithEmailAction)
+            sb.AppendLine($" - {keyValuePair.Value.Count} email groups marked for: {keyValuePair.Key.GetDescription()}");
+
+        return sb.ToString();
     }
 
     private async Task<SortedDictionary<IEmailAction, List<MarkedEmailGroup>>> GetMarkedEmailGroupsSortedByEmailAction(List<string> existingFilePaths)
@@ -109,7 +136,6 @@ internal class ProcessGroupedEmailFileAppAction : IAppAction
             groupedByEmailActions.Add(_emailActionProvider.GetEmailAction(actionCodeGroup.Key), actionCodeGroup.Value);
 
         return Sort(groupedByEmailActions);
-
     }
 
     private static SortedDictionary<IEmailAction, List<MarkedEmailGroup>> Sort(Dictionary<IEmailAction, List<MarkedEmailGroup>> markedEmailGroups)
