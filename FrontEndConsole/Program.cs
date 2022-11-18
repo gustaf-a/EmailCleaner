@@ -15,7 +15,7 @@ internal class Program
     {
         Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day, shared: true)
+                .WriteTo.File("logs/frontendconsole.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
         var builder = Host.CreateDefaultBuilder(args);
