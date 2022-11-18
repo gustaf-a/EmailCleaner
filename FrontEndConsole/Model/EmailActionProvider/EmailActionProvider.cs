@@ -11,6 +11,10 @@ public class EmailActionProvider : IEmailActionProvider
     public EmailActionProvider(IApiGatewayService apiGatewayService)
     {
         AddEmailAction(new DeleteForced());
+        AddEmailAction(new DeleteSafe());
+        AddEmailAction(new LabelsAdd());
+        AddEmailAction(new LabelsRemove());
+        AddEmailAction(new SaveAttachments());
         AddEmailAction(new NotMarkedEmailAction());
     }
 
