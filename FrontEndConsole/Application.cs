@@ -40,8 +40,7 @@ namespace FrontEndConsole
             if (_applicationOptions.DoCollectMessages)
                 _appActions.AddLast(appActionFactory.Create(ApplicationAction.CollectEmailsAction));
 
-            if (!_appActions.Any())
-                _appActions.AddLast(appActionFactory.Create(ApplicationAction.StartMenuAction));
+            _appActions.AddLast(appActionFactory.Create(ApplicationAction.StartMenuAction));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
