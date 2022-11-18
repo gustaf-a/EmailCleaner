@@ -1,6 +1,7 @@
 ﻿using EmailCleaner.Client.Data;
 using FrontEndConsole.Model.Configuration;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace FrontEndConsole.Services;
 
@@ -45,7 +46,7 @@ public class ApiGatewayServiceV1 : IApiGatewayService
 
         Log.Information("Fake request sent.");
         //TODO
-        _httpClient.BaseAddress = new Uri($"http:/{_applicationOptions.ApiGatewayHostName}/{port}/v1/emailcleaner/collect/start");
+        //_httpClient.BaseAddress = new Uri($"http:/{_applicationOptions.ApiGatewayHostName}/{port}/v1/emailcleaner/collect/start");
         return;
     }
 

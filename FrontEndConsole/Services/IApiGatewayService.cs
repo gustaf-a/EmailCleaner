@@ -2,7 +2,7 @@
 
 namespace FrontEndConsole.Services;
 
-internal interface IApiGatewayService
+public interface IApiGatewayService
 {
     public Task<List<EmailData>> GetEmails();
     public Task StartCollecting();

@@ -6,6 +6,8 @@ using FrontEndConsole.Model.OutputHandler;
 using FrontEndConsole.Model.AppActionsFactory;
 using FrontEndConsole.Services;
 using EmailCleaner.Client.Email.Sort;
+using FrontEndConsole.Model.OutputHandler.TextConverter;
+using FrontEndConsole.Model.EmailActionProvider;
 
 namespace FrontEndConsole;
 
@@ -50,8 +52,11 @@ internal class Program
         services.AddScoped<IOutputHandler, FileSystemOutputhandlerV1>();
         services.AddScoped<HttpClient>();
 
+        services.AddScoped<ITextConverter, CsvTextConverter>();
+
         services.AddScoped<IEmailSorter, EmailSorterV1>();
 
+        services.AddSingleton<IEmailActionProvider, EmailActionProvider>();
         services.AddSingleton<IMainUserInterface, ConsoleMainUserInterfaceV1>();
     }
 }
