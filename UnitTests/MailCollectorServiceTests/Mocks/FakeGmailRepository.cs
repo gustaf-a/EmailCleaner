@@ -30,6 +30,13 @@ namespace MailCollectorServiceTests.Mocks
             return Task.FromResult(new List<Message> { message });
         }
 
+        public Task<List<Message>> GetEmailDetails(List<string> messageIds, CancellationToken cancellationToken)
+        {
+            var listMessagesResponse = GetFileContents<ListMessagesResponse>(_gmailsJsonFilePath);
+
+            return Task.FromResult(listMessagesResponse.Messages.ToList());
+        }
+
         public Task<List<Message>> GetEmails(CancellationToken cancellationToken)
         {
             var listMessagesResponse = GetFileContents<ListMessagesResponse>(_gmailsJsonFilePath);

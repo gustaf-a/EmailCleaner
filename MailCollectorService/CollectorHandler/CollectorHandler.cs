@@ -70,9 +70,18 @@ namespace MailCollectorService.CollectorHandler
                         break;
                     }
 
-                    _eventQueue.PublishToQueue(_messageQueueOptions.Exchange, _messageQueueOptions.RoutingKeyCollected, emails);
+                    var detailedEmails = await _emailCollectorService.GetEmailDetails(emails, cancellationToken);
 
-                    Log.Information($"Email batch sent to queue with {emails.Count} emails.");
+                    if (detailedEmails is null || detailedEmails.Count == 0)
+                    {
+                        Log.Information("No more emails found. Stopping collection of emails.");
+
+                        break;
+                    }
+
+                    _eventQueue.PublishToQueue(_messageQueueOptions.Exchange, _messageQueueOptions.RoutingKeyCollected, detailedEmails);
+
+                    Log.Information($"Email batch sent to queue with {detailedEmails.Count} emails.");
 
                 } while (!cancellationToken.IsCancellationRequested);
             }

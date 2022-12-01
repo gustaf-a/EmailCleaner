@@ -16,6 +16,38 @@ public class GmailCollectorService : IEmailCollectorService
         _gmailRepository = gmailRepository;
     }
 
+    public async Task<List<Email>> GetEmailDetails(List<Email> emails, CancellationToken cancellationToken)
+    {
+        currentAttempts = 0;
+
+        do
+        {
+            try
+            {
+                var detailedMessages = await _gmailRepository.GetEmailDetails(emails.Select(e => e.Id).ToList(), cancellationToken);
+
+                Log.Information($"Got {emails.Count} detailed messages.");
+
+                return detailedMessages.ToEmailList();
+            }
+            catch (Exception ex)
+            {
+                //TODO Check if is gmail exception
+
+                if (ShouldRetryOn())
+                {
+                    Log.Warning(ex, $"Exception caught. Retrying");
+                    continue;
+                }
+
+                Log.Error(ex, $"Exception encountered and no more retries left.");
+                throw;
+            }
+        } while (!cancellationToken.IsCancellationRequested);
+
+        return new();
+    }
+
     public async Task<List<Email>> GetEmails(CancellationToken cancellationToken)
     {
         currentAttempts = 0;
@@ -28,11 +60,7 @@ public class GmailCollectorService : IEmailCollectorService
 
                 Log.Information($"Got list of {undetailedMessages.Count} messages.");
 
-                var detailedMessages = await _gmailRepository.GetEmailDetails(undetailedMessages, cancellationToken);
-
-                Log.Information($"Got {detailedMessages.Count} detailed messages.");
-                
-                return detailedMessages.ToEmailList();
+                return undetailedMessages.ToEmailList();
             }
             catch (Exception ex)
             {
@@ -54,7 +82,7 @@ public class GmailCollectorService : IEmailCollectorService
 
     private bool ShouldRetryOn()
     {
-        if(currentAttempts > maxAttempts)
+        if (currentAttempts > maxAttempts)
             return false;
 
         currentAttempts++;

@@ -114,13 +114,13 @@ public class GmailRepositoryV1 : IGmailRepository
         return listMessagesResponse;
     }
 
-    public async Task<List<Message>> GetEmailDetails(List<Message> undetailedMessages, CancellationToken cancellationToken)
+    public async Task<List<Message>> GetEmailDetails(List<string> messageIds, CancellationToken cancellationToken)
     {
         var messages = new List<Message>();
 
-        foreach (var undetailedMessage in undetailedMessages)
+        foreach (var id in messageIds)
         {
-            var getMessagesRequest = _gmailService.Users.Messages.Get(_gmailOptions.UserId, undetailedMessage.Id);
+            var getMessagesRequest = _gmailService.Users.Messages.Get(_gmailOptions.UserId, id);
 
             if (cancellationToken.IsCancellationRequested)
                 break;
@@ -132,7 +132,7 @@ public class GmailRepositoryV1 : IGmailRepository
 
             if (message is null)
             {
-                Log.Warning($"Failed to get message details for id: '{undetailedMessage.Id}'");
+                Log.Warning($"Failed to get message details for id: '{id}'");
                 continue;
             }
 
