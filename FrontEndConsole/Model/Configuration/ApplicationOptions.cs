@@ -4,7 +4,7 @@ internal class ApplicationOptions
 {
     public const string Application = "Application";
 
-    public string ApiGatewayHostName { get; set; } = "api-gateway";
+    public string ApiGatewayHostName { get; set; } = "localhost";
 
     public bool DoCollectMessages { get; set; } = false;
     public int CollectTimeout { get; set; } = 60;
