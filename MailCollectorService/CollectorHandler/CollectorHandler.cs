@@ -25,7 +25,7 @@ namespace MailCollectorService.CollectorHandler
             _eventQueue = eventQueue;
         }
 
-        public void StartCollector()
+        public async Task StartCollector()
         {
             if (isRunning)
                 return;
@@ -34,21 +34,21 @@ namespace MailCollectorService.CollectorHandler
 
             _cancellationTokenSource = new();
 
-            Task.Run(async () => await CollectEmails(_cancellationTokenSource.Token)).ConfigureAwait(false);
+            await CollectEmails(_cancellationTokenSource.Token);
 
             return;
         }
 
-        public void StopCollector()
+        public Task StopCollector()
         {
             if (_cancellationTokenSource is null)
-                return;
+                return Task.CompletedTask;
 
             Log.Information("Received command to stop collecting.");
 
             _cancellationTokenSource.Cancel();
 
-            return;
+            return Task.CompletedTask;
         }
 
         public async Task CollectEmails(CancellationToken cancellationToken)

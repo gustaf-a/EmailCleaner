@@ -2,6 +2,6 @@
 
 public interface ICollectorHandler
 {
-    public void StartCollector();
-    public void StopCollector();
+    public Task StartCollector();
+    public Task StopCollector();
 }

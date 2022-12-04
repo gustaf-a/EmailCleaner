@@ -19,18 +19,14 @@ public class MailCollectorController
         => "pong";
 
     [HttpGet("start")]
-    public Task StartCollectingMessages()
+    public async Task StartCollectingMessages()
     {
-        _collectorHandler.StartCollector();
-
-        return Task.CompletedTask;
+        await _collectorHandler.StartCollector();
     }
 
     [HttpGet("stop")]
-    public Task StopCollectingMessages()
+    public async Task StopCollectingMessages()
     {
-        _collectorHandler.StopCollector();
-
-        return Task.CompletedTask;
+        await _collectorHandler.StopCollector();
     }
 }
