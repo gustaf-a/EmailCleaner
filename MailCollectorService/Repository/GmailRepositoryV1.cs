@@ -77,6 +77,11 @@ public class GmailRepositoryV1 : IGmailRepository
         }
     }
 
+    public Task<bool> EnsureWarm()
+    {
+        return Task.FromResult(_gmailService != null);
+    }
+
     public async Task<List<Message>> GetEmails(CancellationToken cancellationToken)
     {
         if (_reachedEndOfEmails)

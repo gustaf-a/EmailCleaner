@@ -16,6 +16,11 @@ public class GmailCollectorService : IEmailCollectorService
         _gmailRepository = gmailRepository;
     }
 
+    public void EnsureWarm()
+    {
+        Log.Information($"GmailRepository started: {_gmailRepository.EnsureWarm()}");
+    }
+
     public async Task<List<Email>> GetEmailDetails(List<Email> emails, CancellationToken cancellationToken)
     {
         var result = new List<Email>();
