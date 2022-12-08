@@ -18,17 +18,25 @@ public class GmailCollectorService : IEmailCollectorService
 
     public async Task<List<Email>> GetEmailDetails(List<Email> emails, CancellationToken cancellationToken)
     {
+        var result = new List<Email>();
+
+        foreach (var email in emails)
+            result.Add(await GetEmailDetails(email, cancellationToken));
+
+        return result;
+    }
+
+    public async Task<Email> GetEmailDetails(Email email, CancellationToken cancellationToken)
+    {
         currentAttempts = 0;
 
         do
         {
             try
             {
-                var detailedMessages = await _gmailRepository.GetEmailDetails(emails.Select(e => e.Id).ToList(), cancellationToken);
+                var detailedMessage = await _gmailRepository.GetEmailDetails(email.Id, cancellationToken);
 
-                Log.Information($"Got {emails.Count} detailed messages.");
-
-                return detailedMessages.ToEmailList();
+                return detailedMessage.ToEmail();
             }
             catch (Exception ex)
             {
