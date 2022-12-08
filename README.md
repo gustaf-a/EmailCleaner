@@ -7,9 +7,10 @@ This is a practice project built with a microservice architecture for learning r
 
 Features: 
 - Microservices in docker containers built with an API Gateway pattern
-- RabbitMQ
-- Service tests
+- RabbitMQ for communication between microservices
+- Unit and service tests
 - Console and file based front end
+- Rx.Net Reactive Programming
 - Experimental .Net MAUI front end
 
 ## Overview
