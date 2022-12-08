@@ -33,7 +33,8 @@ public class Startup
         services.AddSingleton<IMessageQueue, RabbitMqMessageQueueV1>();
 
         services.AddSingleton<IGmailRepository, GmailRepositoryV1>();
-        services.AddSingleton<ICollectorHandler, CollectorHandler.CollectorHandler>();
+        //services.AddSingleton<ICollectorHandler, CollectorHandler.CollectorHandler>();
+        services.AddSingleton<ICollectorHandler, CollectorHandler.CollectorHandlerRx>();
 
     }
 
