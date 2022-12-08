@@ -9,14 +9,22 @@ public static class MessageExtensions
         if (values is null)
             return new();
 
-        return values.Select(m => new Email()
+        return values.Select(m => m.ToEmail()).ToList();
+    }
+
+    public static Email ToEmail(this Google.Apis.Gmail.v1.Data.Message value)
+    {
+        if (value is null)
+            return new();
+
+        return new Email()
         {
-            Id = m.Id,
-            LabelIds = JsonConvert.SerializeObject(m.LabelIds),
+            Id = value.Id,
+            LabelIds = JsonConvert.SerializeObject(value.LabelIds),
             Origin = "gmail",
-            Payload = JsonConvert.SerializeObject(m.Payload),
-            Snippet = m.Snippet,
-            ThreadId = m.ThreadId
-        }).ToList();
+            Payload = JsonConvert.SerializeObject(value.Payload),
+            Snippet = value.Snippet,
+            ThreadId = value.ThreadId
+        };
     }
 }
