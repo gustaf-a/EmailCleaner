@@ -7,4 +7,6 @@ public class MessageQueueOptions
     public string Exchange { get; set; } = string.Empty;
     public string HostName { get; set; } = string.Empty;
     public string RoutingKeyCollected { get; set; } = string.Empty;
+
+    public int EmailBufferSize { get; set; } = 10;
 }
