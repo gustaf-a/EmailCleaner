@@ -1,6 +1,7 @@
 ﻿using MailCollectorService.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using Serilog;
 using System.Text;
 
 namespace MailCollectorService.MessageQueue;
@@ -20,7 +21,19 @@ public class RabbitMqMessageQueueV1 : IMessageQueue
 
     public void PublishToQueue(string exchange, string routingKey, object messageData)
     {
+        if (messageData is null)
+        {
+            Log.Warning($"Tried to publish null object to exchange {exchange} with routingKey {routingKey}. Ignoring message.");
+            return;
+        }
+
         var body = Encoding.UTF8.GetBytes(CreateMessageBody(messageData));
+
+        if (body?.Length < 5)
+        {
+            Log.Warning($"Tried to send impossibly small body to exchange {exchange} with routingKey {routingKey}. Ignoring message {messageData.ToString()}.");
+            return;
+        }
 
         _channel.BasicPublish(exchange: exchange,
                                 routingKey: routingKey,
