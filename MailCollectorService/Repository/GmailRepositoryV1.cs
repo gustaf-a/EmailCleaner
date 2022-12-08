@@ -95,7 +95,7 @@ public class GmailRepositoryV1 : IGmailRepository
         var gmailSendersRequest = _gmailService.Users.Messages.List(_gmailOptions.UserId);
 
         gmailSendersRequest.MaxResults = _maxEmailsPerRequest;
-        
+
         gmailSendersRequest.PageToken = _nextPageToken;
 
         if (cancellationToken.IsCancellationRequested)
@@ -108,37 +108,27 @@ public class GmailRepositoryV1 : IGmailRepository
 
         if (listMessagesResponse is null)
             throw new Exception("Failed to get list of messages.");
-            
+
         _nextPageToken = listMessagesResponse.NextPageToken;
 
         return listMessagesResponse;
     }
 
-    public async Task<List<Message>> GetEmailDetails(List<string> messageIds, CancellationToken cancellationToken)
+    public async Task<Message> GetEmailDetails(string messageId, CancellationToken cancellationToken)
     {
-        var messages = new List<Message>();
+        var getMessagesRequest = _gmailService.Users.Messages.Get(_gmailOptions.UserId, messageId);
 
-        foreach (var id in messageIds)
+        if (cancellationToken.IsCancellationRequested)
+            return null;
+
+        var message = await _retryPolicy.ExecuteAsync(async () =>
         {
-            var getMessagesRequest = _gmailService.Users.Messages.Get(_gmailOptions.UserId, id);
+            return await getMessagesRequest.ExecuteAsync(cancellationToken);
+        });
 
-            if (cancellationToken.IsCancellationRequested)
-                break;
+        if (message is null)
+            Log.Warning($"Failed to get message details for id: '{messageId}'");
 
-            var message = await _retryPolicy.ExecuteAsync(async () =>
-            {
-                return await getMessagesRequest.ExecuteAsync(cancellationToken);
-            });
-
-            if (message is null)
-            {
-                Log.Warning($"Failed to get message details for id: '{id}'");
-                continue;
-            }
-
-            messages.Add(message);
-        }
-
-        return messages;
+        return message;
     }
 }
