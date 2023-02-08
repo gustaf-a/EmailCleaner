@@ -17,16 +17,16 @@ Features:
 
 ![Solution Flowchart](EmailCleaner_Overview.png)
 
-- RabbitMQ
-Used between´for async communication configured between microservices.
+- RabbitMQ 
+Used between for async communication configured between microservices.
 
-- MailCollectorService
+- MailCollectorService 
 Runs a collector which retrieves emails from Google's GMail API and then publishes the emails to the RabbitMQ.
 
-- MailProviderService
+- MailProviderService 
 Stores and provides the emails from the RabbitMQ.
 
-- APIGateway
+- APIGateway 
 Simple gateway for the microservices.
 
 
